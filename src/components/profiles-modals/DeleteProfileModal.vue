@@ -23,7 +23,7 @@ export default class DeleteProfileModal extends Vue {
         try {
             await this.$store.dispatch('profiles/removeSelectedProfile');
         } catch (e) {
-            const err = R2Error.fromThrownValue(e, 'Error whilst deleting profile');
+            const err = R2Error.fromThrownValue(e, '删除用户配置时发生错误');
             this.$store.commit('error/handleError', err);
         }
         this.closeDeleteProfileModal();
@@ -38,15 +38,15 @@ export default class DeleteProfileModal extends Vue {
             <p class="modal-card-title">Delete profile</p>
         </template>
         <template v-slot:body>
-            <p>This will remove all mods, and their config files, installed within this profile.</p>
-            <p>If this was an accident, click either the darkened area, or the cross inside located in the top right.</p>
-            <p>Are you sure you'd like to delete this profile?</p>
+            <p>这将移除用户配置内所有安装的mod以及他们的配置文件。</p>
+            <p>如果这是误操作，请点击灰暗区域，或者右上角的×关闭。</p>
+            <p>你确定要删除这个用户配置吗？</p>
         </template>
         <template v-slot:footer>
             <button
                 class="button is-danger"
                 @click="removeProfile()"
-            >Delete profile</button>
+            >删除用户配置</button>
         </template>
 
     </ModalCard>

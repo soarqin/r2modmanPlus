@@ -26,8 +26,8 @@ export default class AssociatedModsModal extends Vue {
     get mod(): ManifestV2 {
         if (this.$store.state.modals.associatedModsModalMod === null) {
             throw new R2Error(
-                'Error while opening AssociatedModsModal',
-                'Mod not provided'
+                '打开AssociatedModsModal时发生错误',
+                '未提供mod'
             );
         }
         return this.$store.state.modals.associatedModsModalMod;
@@ -42,12 +42,12 @@ export default class AssociatedModsModal extends Vue {
     <ModalCard v-if="isOpen" :is-active="true" @close-modal="onClose">
         <template v-slot:header>
             <p class='card-header-title'>
-                Mods associated with {{mod.getName()}}
+                {{mod.getName()}}的相关mod列表
             </p>
         </template>
         <template v-slot:body>
             <div v-if="!!dependencies.size">
-                <h3 class="subtitle is-5">Dependencies</h3>
+                <h3 class="subtitle is-5">依赖于</h3>
                 <ul class="list">
                     <li class="list-item" v-for='(mod) in dependencies'
                         :key='`dependency-${mod.getName()}`'>
@@ -57,7 +57,7 @@ export default class AssociatedModsModal extends Vue {
             </div>
             <br v-if="!!dependencies.size"/>
             <div v-if="!!dependants.size">
-                <h3 class="subtitle is-5">Dependants</h3>
+                <h3 class="subtitle is-5">依赖者</h3>
                 <ul class="list">
                     <li class="list-item" v-for='(mod) in dependants'
                         :key='`dependant-${mod.getName()}`'>
@@ -68,7 +68,7 @@ export default class AssociatedModsModal extends Vue {
         </template>
         <template v-slot:footer>
             <button class="button is-info" @click="onClose">
-                Done
+                完成
             </button>
         </template>
     </ModalCard>

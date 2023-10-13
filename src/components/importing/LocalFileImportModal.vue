@@ -2,22 +2,22 @@
     <div>
         <Modal :show-close="true" @close-modal="emitClose" :open="visible">
             <template slot="title">
-                <p class='card-header-title'>Import mod from file</p>
+                <p class='card-header-title'>从文件导入mod</p>
             </template>
             <template slot="footer" v-if="fileToImport === null">
-                <button class="button is-info" @click="selectFile">Select file</button>
+                <button class="button is-info" @click="selectFile">选择文件</button>
             </template>
             <template slot="footer" v-else-if="fileToImport !== null">
-                <button class="button is-info" @click="importFile">Import local mod</button>
+                <button class="button is-info" @click="importFile">导入本地mod</button>
             </template>
 
             <template slot="body" v-if="fileToImport === null">
                 <template v-if="!waitingForSelection">
-                    <p>Please select a zip or DLL to be imported.</p>
-                    <p>Zip files that contain a manifest file will have the some information pre-filled. If a manifest is not available, this will have to be entered manually.</p>
+                    <p>请选择要导入的zip或DLL。</p>
+                    <p>包含manifest的Zip文件将会自动填入一些mod信息，否则需要全部手动输入。</p>
                 </template>
                 <template v-else>
-                    <p>Waiting for file. This may take a minute.</p>
+                    <p>等待文件选择。</p>
                 </template>
             </template>
 
@@ -26,21 +26,21 @@
                     <p>{{ validationMessage }}</p>
                 </div>
                 <div class="input-group input-group--flex margin-right">
-                    <label for="mod-name" class="non-selectable">Mod name</label>
-                    <input id="mod-name" ref="mod-name" class="input margin-right" type="text" v-model="modName" placeholder="Enter the name of the mod"/>
+                    <label for="mod-name" class="non-selectable">Mod名</label>
+                    <input id="mod-name" ref="mod-name" class="input margin-right" type="text" v-model="modName" placeholder="输入Mod名"/>
                 </div>
                 <br/>
                 <div class="input-group input-group--flex margin-right">
-                    <label for="mod-author" class="non-selectable">Author</label>
-                    <input id="mod-author" ref="mod-author" class="input margin-right" type="text" v-model="modAuthor" placeholder="Enter the author name"/>
+                    <label for="mod-author" class="non-selectable">作者</label>
+                    <input id="mod-author" ref="mod-author" class="input margin-right" type="text" v-model="modAuthor" placeholder="输入作者名"/>
                 </div>
                 <br/>
                 <div class="input-group input-group--flex margin-right">
-                    <label for="mod-author" class="non-selectable">Description (optional)</label>
-                    <input id="mod-description" ref="mod-description" class="input margin-right" type="text" v-model="modDescription" placeholder="Enter a description"/>
+                    <label for="mod-author" class="non-selectable">描述 (可选)</label>
+                    <input id="mod-description" ref="mod-description" class="input margin-right" type="text" v-model="modDescription" placeholder="输入描述"/>
                 </div>
                 <hr/>
-                <h3 class="title is-6">Version</h3>
+                <h3 class="title is-6">版本</h3>
                 <div class="input-group input-group--flex margin-right non-selectable">
                     <div class="is-flex">
                         <div class="margin-right margin-right--half-width">
@@ -107,8 +107,8 @@ export default class LocalFileImportModal extends Vue {
     private async selectFile() {
         this.waitingForSelection = true;
         InteractionProvider.instance.selectFile({
-            buttonLabel: "Select file",
-            title: "Import local mod from file",
+            buttonLabel: "选择文件",
+            title: "从文件导入本地mod",
             filters: []
         }).then(value => {
             if (value.length > 0) {
@@ -167,7 +167,7 @@ export default class LocalFileImportModal extends Vue {
                     }
                 }
             } else {
-                console.log("Does not contain manifest");
+                console.log("不包含manifest");
             }
         }
 
@@ -250,10 +250,10 @@ export default class LocalFileImportModal extends Vue {
 
         switch (0) {
             case this.modName.trim().length:
-                this.validationMessage = "The mod name must not be empty.";
+                this.validationMessage = "mod名不能为空。";
                 return;
             case this.modAuthor.trim().length:
-                this.validationMessage = "The mod author must not be empty.";
+                this.validationMessage = "mod作者不能为空。";
                 return;
         }
 
@@ -261,20 +261,20 @@ export default class LocalFileImportModal extends Vue {
             case Number(this.modVersionMajor):
             case Number(this.modVersionMinor):
             case Number(this.modVersionPatch):
-                this.validationMessage = "Major, minor, and patch must all be numbers.";
+                this.validationMessage = "major, minor和patch必须均为数字。";
                 return;
         }
 
         if (this.modVersionMajor < 0) {
-            this.validationMessage = "Major, minor, and patch must be whole numbers greater than 0.";
+            this.validationMessage = "major不能小于0。";
             return;
         }
         if (this.modVersionMinor < 0) {
-            this.validationMessage = "Major, minor, and patch must be whole numbers greater than 0.";
+            this.validationMessage = "minor不能小于0。";
             return;
         }
         if (this.modVersionPatch < 0) {
-            this.validationMessage = "Major, minor, and patch must be whole numbers greater than 0.";
+            this.validationMessage = "patch不能小于0。";
             return;
         }
 

@@ -29,8 +29,8 @@ export default class DisableModModal extends Vue {
     get mod(): ManifestV2 {
         if (this.$store.state.modals.disableModModalMod === null) {
             throw new R2Error(
-                'Error while opening DisableModModal',
-                'Mod not provided'
+                '打开DisableModModal时发生错误',
+                '未提供mod'
             );
         }
         return this.$store.state.modals.disableModModalMod;
@@ -72,14 +72,13 @@ export default class DisableModModal extends Vue {
 <template>
     <ModalCard v-if="isOpen" :is-active="isOpen" :can-close="!isLocked" @close-modal="onClose">
         <template v-slot:header>
-            <p class="modal-card-title">Disabling {{mod.getName()}}</p>
+            <p class="modal-card-title">正在禁用{{mod.getName()}}</p>
         </template>
         <template v-slot:body>
             <div class="max-height-100 is-flex is-flex-direction-column">
                 <div class='notification is-warning'>
                     <p>
-                        Other mods depend on this mod. Select <strong>Disable all</strong>
-                        to disable dependent mods, otherwise they may cause errors.
+                        有其他mod依赖此mod。选择<strong>禁用全部</strong>来禁用所有相关mod，否则可能会发生错误。
                     </p>
                 </div>
                 <h3 class="subtitle mb-3">Mods to be disabled</h3>
@@ -93,7 +92,7 @@ export default class DisableModModal extends Vue {
                     </ul>
                 </div>
                 <div v-if="isLocked" class="mt-3">
-                    <h3 class="subtitle mb-3">Disabling {{modBeingDisabled}}</h3>
+                    <h3 class="subtitle mb-3">正在禁用{{modBeingDisabled}}</h3>
                     <progress class="progress is-small is-info"/>
                 </div>
             </div>
@@ -102,12 +101,12 @@ export default class DisableModModal extends Vue {
             <button class="button is-info"
                     :disabled="isLocked"
                     @click="disableModIncludingDependants">
-                Disable all (recommended)
+                禁用全部(推荐)
             </button>
             <button class="button"
                     :disabled="isLocked"
                     @click="disableModExcludingDependants">
-                Disable {{mod.getName()}} only
+                仅禁用{{mod.getName()}}
             </button>
         </template>
     </ModalCard>

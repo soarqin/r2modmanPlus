@@ -2,16 +2,16 @@
     <div>
         <Hero
             :title="configFile.getName()"
-            subtitle="Editing config file"
+            subtitle="编辑配置文件"
             hero-type="is-info"
         />
         <br/>
         <div class="sticky-top sticky-top--buttons margin-right">
-            <button class="button is-info margin-right margin-right--half-width" @click="save">Save</button>
-            <button class="button is-danger" @click="cancel">Cancel</button>
+            <button class="button is-info margin-right margin-right--half-width" @click="save">保存</button>
+            <button class="button is-danger" @click="cancel">取消</button>
         </div>
         <div v-if="configFile.getPath().toLowerCase().endsWith('.cfg')" class="margin-right non-selectable">
-            <h3 class='subtitle is-3'>Sections</h3>
+            <h3 class='subtitle is-3'>分区</h3>
             <ul>
                 <li v-for="(value, key) in dumpedConfigVariables" :key="`${key}-${value.toString()}-tab`">
                     <a :href="`#${key}`">{{ key }}</a>
@@ -30,8 +30,8 @@
                                 <span class="pre selectable" v-if="!line.commentsExpanded">{{getCommentDisplayShort(line.comments)}}</span>
                                 <span class="pre selectable" v-else>{{getCommentDisplay(line.comments)}}</span>
                                 <a @click="toggleEntryExpansion(key, variable)">
-                                    <span v-if="!line.commentsExpanded">Show more</span>
-                                    <span v-else>Show less</span>
+                                    <span v-if="!line.commentsExpanded">显示更多</span>
+                                    <span v-else>显示更少</span>
                                 </a>
                             </template>
                             <span class="pre" v-else>{{getCommentDisplay(line.comments)}}</span>

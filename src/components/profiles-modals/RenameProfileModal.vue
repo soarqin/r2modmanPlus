@@ -67,7 +67,7 @@ export default class RenameProfileModal extends Vue {
         try {
             await this.$store.dispatch('profiles/renameProfile', {newName: this.newProfileName});
         } catch (e) {
-            const err = R2Error.fromThrownValue(e, 'Error whilst renaming profile');
+            const err = R2Error.fromThrownValue(e, '用户配置改名时发生错误');
             this.$store.commit('error/handleError', err);
         }
         this.closeModal();
@@ -79,10 +79,10 @@ export default class RenameProfileModal extends Vue {
     <ModalCard v-if="isOpen" :is-active="isOpen" @close-modal="closeModal">
 
         <template v-slot:header>
-            <p class="modal-card-title">Rename a profile</p>
+            <p class="modal-card-title">用户配置改名</p>
         </template>
         <template v-slot:body>
-            <p>This profile will store its own mods independently from other profiles.</p>
+            <p>用户配置之间保存的数据相互独立。</p>
 
             <input
                 class="input"
@@ -92,18 +92,18 @@ export default class RenameProfileModal extends Vue {
             />
 
             <span class="tag is-dark" v-if="newProfileName === '' || makeProfileNameSafe(newProfileName) === ''">
-                Profile name required
+                请输入用户配置名称
             </span>
             <span class="tag is-success" v-else-if="!doesProfileExist(newProfileName)">
-                "{{makeProfileNameSafe(newProfileName)}}" is available
+                "{{makeProfileNameSafe(newProfileName)}}" 可用
             </span>
             <span class="tag is-danger" v-else-if="doesProfileExist(newProfileName)">
-                "{{makeProfileNameSafe(newProfileName)}}" is either already in use, or contains invalid characters
+                "{{makeProfileNameSafe(newProfileName)}}" 已存在，或者包含非法字符
             </span>
         </template>
         <template v-slot:footer>
-            <button class="button is-danger" v-if="doesProfileExist(newProfileName)" disabled>Rename</button>
-            <button class="button is-info" @click="performRename(newProfileName)" v-else>Rename</button>
+            <button class="button is-danger" v-if="doesProfileExist(newProfileName)" disabled>改名</button>
+            <button class="button is-info" @click="performRename(newProfileName)" v-else>改名</button>
         </template>
 
     </ModalCard>

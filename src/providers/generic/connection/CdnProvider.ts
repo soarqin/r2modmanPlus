@@ -9,13 +9,9 @@ const CDNS = [
 const TEST_FILE = "healthz";
 
 const CONNECTION_ERROR = new R2Error(
-    "Can't reach content delivery networks",
-    `All Thunderstore CDNs seem to be currently unreachable from
-     this computer. You can still use the mod manager, but
-     downloading mods will not work.`,
-    `Test another internet connection, if available. For example
-     using a VPN or connecting to a mobile hotspot might solve the
-     issue.`
+    "无法访问CDN网络",
+    `所有Thunderstore CDN网络都无法被访问。你依然可以使用mod管理器，但下载mod功能将无法正常工作。`,
+    `请尝试切换互联网连接以解决此问题。`
 );
 
 export default class CdnProvider {
@@ -25,7 +21,7 @@ export default class CdnProvider {
     public static get current() {
         const i = CDNS.findIndex((cdn) => cdn === CdnProvider.preferredCdn);
         return {
-            label: [-1, 0].includes(i) ? "Main CDN" : `Mirror #${i}`,
+            label: [-1, 0].includes(i) ? "主CDN" : `镜像#${i}`,
             url: CdnProvider.preferredCdn
         };
     }

@@ -66,8 +66,8 @@ export default {
             // Sanity check before attempting to alter the profile state.
             if (state.activeProfile === null) {
                 throw new R2Error(
-                    'No active profile found',
-                    'Unable to modify mod list state when active profile is not set.'
+                    '没有选定的用户配置',
+                    '没有选定的用户配置时不能改变mod列表。'
                 )
             }
 

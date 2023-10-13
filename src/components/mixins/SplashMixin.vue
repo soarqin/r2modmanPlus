@@ -20,7 +20,7 @@ export default class SplashMixin extends Vue {
         const item = this.requests.find((ri) => ri.getName() === name);
 
         if (item === undefined) {
-            throw new Error(`Unknown RequestItem "${name}"`);
+            throw new Error(`无效的请求项目"${name}"`);
         }
 
         return item;
@@ -37,10 +37,10 @@ export default class SplashMixin extends Vue {
 
     // Get the list of game-specific packages to exclude.
     async getExclusions() {
-        this.loadingText = 'Connecting to GitHub repository';
+        this.loadingText = '正在连接到GitHub仓库';
 
         const showProgress = (progress: number) => {
-            this.loadingText = 'Downloading exclusions';
+            this.loadingText = '正在下载排除列表';
             this.getRequestItem('ExclusionsList').setProgress(progress);
         };
 
@@ -51,34 +51,34 @@ export default class SplashMixin extends Vue {
 
     // Get the list of Thunderstore mods from API or local cache.
     async getThunderstoreMods() {
-        this.loadingText = 'Connecting to Thunderstore';
+        this.loadingText = '正在连接到Thunderstore';
         let response: ApiResponse|undefined = undefined;
 
         const showProgress = (progress: number) => {
-            this.loadingText = 'Getting mod list from Thunderstore';
+            this.loadingText = '正在从Thunderstore获取mod列表';
             this.getRequestItem('ThunderstoreDownload').setProgress(progress);
         };
 
         try {
             response = await ConnectionProvider.instance.getPackages(this.$store.state.activeGame, showProgress, 3);
         } catch (e) {
-            console.error('SplashMixin failed to fetch mod list from API.', e);
+            console.error('SplashMixin无法从API获取mod列表。', e);
         } finally {
             this.getRequestItem('ThunderstoreDownload').setProgress(100);
         }
 
         if (response) {
-            this.loadingText = 'Storing the mod list into local cache';
+            this.loadingText = '正在将mod列表保存到本体缓存';
 
             try {
                 await this.$store.dispatch('tsMods/updatePersistentCache', response.data);
             } catch (e) {
-                console.error('SplashMixin failed to cache mod list locally.', e);
+                console.error('SplashMixin无法本地缓存mod列表。', e);
             }
 
-            this.loadingText = 'Processing the mod list';
+            this.loadingText = '正在处理mod列表';
         } else {
-            this.loadingText = 'Processing the mod list from cache';
+            this.loadingText = '正在从缓存处理mod列表';
         }
 
         this.getRequestItem('CacheOperations').setProgress(50);
@@ -104,8 +104,8 @@ export default class SplashMixin extends Vue {
         ) {
             await this.moveToNextScreen();
         } else {
-            this.heroTitle = 'Failed to get the list of online mods';
-            this.loadingText = 'You may still use the manager offline, but some features might be unavailable.';
+            this.heroTitle = '无法获取在线mod列表';
+            this.loadingText = '你仍然可以离线使用管理器，但部分功能可能失效。';
             this.isOffline = true;
         }
     }

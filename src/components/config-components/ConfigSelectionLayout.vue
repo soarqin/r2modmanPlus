@@ -1,14 +1,14 @@
 <template>
     <div>
         <Hero
-            title="Config editor"
-            subtitle="Select a configuration file to edit"
+            title="配置编辑器"
+            subtitle="选择要编辑的配置文件"
             hero-type="is-info"
         />
         <div class="notification is-warning is-square">
             <div class="container">
                 <p>
-                    Configuration files are generated after launching the game, with the mod installed, at least once.
+                    配置文件在安装Mod并至少运行一次游戏后才会生成。
                 </p>
             </div>
         </div>
@@ -16,12 +16,12 @@
             <div class='no-padding-left card-header-title'>
 
                 <div class="input-group input-group--flex margin-right">
-                    <label for="local-search" class="non-selectable">Search</label>
-                    <input id="local-search" v-model='filterText' class="input margin-right" type="text" placeholder="Search for config files"/>
+                    <label for="local-search" class="non-selectable">搜索</label>
+                    <input id="local-search" v-model='filterText' class="input margin-right" type="text" placeholder="搜索配置文件"/>
                 </div>
 
                 <div class="input-group margin-right">
-                    <label for="config-sort-order" class="non-selectable">Sort</label>
+                    <label for="config-sort-order" class="non-selectable">排序</label>
                     <select id="config-sort-order" class="select select--content-spacing margin-right margin-right--half-width" v-model="sortOrder">
                         <option v-for="(key, index) in getSortOrderOptions()" :key="`${index}-deprecated-position-option`">
                             {{key}}
@@ -44,9 +44,9 @@
                     <template v-slot:title>
                         <span>{{file.getName()}}</span>
                     </template>
-                    <a class='card-footer-item' @click="editConfig(file)">Edit Config</a>
-                    <a class='card-footer-item' @click="openConfig(file)">Open File</a>
-                    <a class='card-footer-item' @click="deleteConfig(file)">Delete</a>
+                    <a class='card-footer-item' @click="editConfig(file)">编辑配置</a>
+                    <a class='card-footer-item' @click="openConfig(file)">打开文件</a>
+                    <a class='card-footer-item' @click="deleteConfig(file)">删除</a>
                 </ExpandableCard>
             </div>
         </div>
@@ -146,8 +146,8 @@ import ProfileModList from '../../r2mm/mods/ProfileModList';
             } catch (e) {
                 this.$store.commit("error/handleError", R2Error.fromThrownValue(
                     e,
-                    "Failed to delete config file",
-                    `Try running ${ManagerInformation.APP_NAME} as an administrator.`
+                    "无法删除配置文件",
+                    `请尝试以管理员身份运行${ManagerInformation.APP_NAME}。`
                 ));
             }
         }

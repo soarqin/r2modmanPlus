@@ -1,4 +1,4 @@
 export enum GameSelectionViewMode {
-    LIST = "List",
-    CARD = "Card"
+    LIST = "列表",
+    CARD = "卡片"
 }

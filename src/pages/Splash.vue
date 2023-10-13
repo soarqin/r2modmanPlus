@@ -2,7 +2,7 @@
     <div>
         <hero :title=heroTitle :subtitle='loadingText' :heroType=heroType />
         <div class='notification is-warning'>
-            <p>Game updates may break mods. If a new update has been released, please be patient.</p>
+            <p>游戏更新可能导致mod失效，因此游戏更新请耐心等待mod作者更新mod。</p>
         </div>
         <progress-bar
             v-if="!isOffline"
@@ -14,8 +14,8 @@
                 <aside class='menu'>
                     <p class='menu-label'>Help</p>
                     <ul class='menu-list'>
-                        <li><a @click="view = 'about'" :class="[view === 'about' ? 'is-active' : '']">About</a></li>
-                        <li><a @click="view = 'faq'" :class="[view === 'faq' ? 'is-active' : '']">FAQ</a></li>
+                        <li><a @click="view = 'about'" :class="[view === 'about' ? 'is-active' : '']">关于</a></li>
+                        <li><a @click="view = 'faq'" :class="[view === 'faq' ? 'is-active' : '']">常见问题</a></li>
                         <li>
                             <link-component :url="'https://github.com/ebkr/r2modmanPlus'" :target="'external'">
                                 <i class='fab fa-github fa-lg' aria-hidden='true' />
@@ -29,8 +29,8 @@
                     <br />
                     <nav class='level' v-if='isOffline'>
                         <div class='level-item'>
-                            <a class='button is-info margin-right margin-right--half-width' @click='continueOffline()'>Continue offline</a>
-                            <a class='button' @click='retryConnection()'>Try to reconnect</a>
+                            <a class='button is-info margin-right margin-right--half-width' @click='continueOffline()'>离线使用</a>
+                            <a class='button' @click='retryConnection()'>尝试重连</a>
                         </div>
                         <br /><br />
                     </nav>
@@ -49,23 +49,21 @@
                     <span class='icon margin-right margin-right--half-width'>
                       <i class='fas fa-info-circle' />
                     </span>
-                                        <strong>Did you know?</strong>
+                                        <strong>你知道吗？</strong>
                                     </p>
                                     <ul class='margin-right'>
                                         <li>
                                             <p>
-                                                You can use the "Install with Mod Manager" button on
+                                                在
                                                 <link-component
                                                     :url="'https://thunderstore.io'" :target="'external'">Thunderstore
                                                 </link-component>
-                                                with r2modman.
+                                                上你可以点击"Install with Mod Manager"调用r2modman安装mod。
                                             </p>
                                         </li>
                                         <li>
                                             <p>
-                                                You can export the selected profile from the settings screen as either a
-                                                file, or a code.
-                                                This makes it easy to share your mod list with friends!
+                                                你可以在设置界面将用户配置导出为文件或代码，以方便分享给他人！
                                             </p>
                                         </li>
                                     </ul>
@@ -73,12 +71,11 @@
                     <span class='icon margin-right margin-right--half-width'>
                       <i class='fas fa-question-circle' />
                     </span>
-                                        <strong>Having trouble?</strong>
+                                        <strong>遇到问题了？</strong>
                                     </p>
                                     <p>
-                                        Send a screenshot of the error in the Thunderstore modding discord server. Feel
-                                        free to ping me
-                                        if it doesn't get resolved.
+                                        发送错误截图到Thunderstore modding discord。
+                                        如果问题没有得到解决欢迎找我。
                                     </p>
                                 </div>
                                 <div class='container' v-else-if="view === 'about'">
@@ -86,10 +83,10 @@
                     <span class='icon margin-right margin-right--half-width'>
                       <i class='fas fa-address-card' />
                     </span>
-                                        <strong>About r2modman</strong>
+                                        <strong>关于r2modman</strong>
                                     </p>
-                                    <p>It's created by Ebkr, using Quasar.</p>
-                                    <p>Quasar provides the following development tools that r2modman is built upon:</p>
+                                    <p>它是Ebkr用Quasar写的。</p>
+                                    <p>Quasar为r2modman的开发提供了以下开发工具/环境:</p>
                                     <ul>
                                         <li>Electron</li>
                                         <li>Node</li>
@@ -102,21 +99,19 @@
                     <span class='icon margin-right margin-right--half-width'>
                       <i class='fas fa-question-circle' />
                     </span>
-                                        <strong>FAQ</strong>
+                                        <strong>常见问题</strong>
                                     </p>
                                     <ul>
                                         <li>
-                                            <p><strong>How do I get started?</strong></p>
+                                            <p><strong>怎么上手？</strong></p>
                                             <p>
-                                                Head on over to the online tab, and download BepInEx and R2API.
+                                                去在线Mod列表页签，下载BepInEx以及对应游戏的mod。
                                             </p>
                                         </li>
                                         <li>
-                                            <p><strong>Starting the game with mods</strong></p>
+                                            <p><strong>启动游戏时加载mod</strong></p>
                                             <p>
-                                                You have to start the game from within the manager. Starting through
-                                                Steam will not work
-                                                without taking manual steps.
+                                                从管理器左上角点击按钮开始游戏才能加载mod，从Steam启动并不会。
                                             </p>
                                         </li>
                                     </ul>
@@ -212,7 +207,7 @@ export default class Splash extends mixins(SplashMixin) {
             const oldBuf = (await FsProvider.instance.readFile(path.join(PathResolver.MOD_ROOT, wrapperName)));
             const newBuf = (await FsProvider.instance.readFile(path.join(__statics, wrapperName)));
             if (!oldBuf.equals(newBuf)) {
-                throw new Error('Outdated buffer');
+                throw new Error('过时的缓冲区');
             }
         } catch (_) {
             if (await FsProvider.instance.exists(path.join(PathResolver.MOD_ROOT, wrapperName))) {
@@ -224,7 +219,7 @@ export default class Splash extends mixins(SplashMixin) {
     }
 
     async created() {
-        this.loadingText = 'Checking for updates';
+        this.loadingText = '正在检查更新';
         setTimeout(this.checkForUpdates, 100);
     }
 }

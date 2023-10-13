@@ -7,10 +7,9 @@
                         <i class="fas fa-exclamation fa-5x"></i>
                     </div>
                     <br/>
-                    <h3 class="title is-4">Looks like you don't have any mods installed</h3>
+                    <h3 class="title is-4">看起来你还没有安装任何mod</h3>
                     <h4 class="subtitle is-5">
-                        Click the Online tab on the left, or click
-                        <a @click="$router.push({name: 'manager.online'})">here</a>.
+                        要安装mod请点击左边的"在线mod"页签，或者点击<a @click="$router.push({name: 'manager.online'})">这里</a>。
                     </h4>
                 </div>
             </div>
@@ -21,8 +20,8 @@
                     <div class="margin-bottom">
                         <div class="notification is-warning margin-right">
                             <span>
-                                You have {{ numberOfModsWithUpdates }} available mod update{{ numberOfModsWithUpdates > 1 ? "s" : ""}}.
-                                Would you like to <a @click="$store.commit('openUpdateAllModsModal')">update all</a>?
+                                有{{ numberOfModsWithUpdates }}个可以更新的mod。
+                                你要<a @click="$store.commit('openUpdateAllModsModal')">更新全部</a>吗？
                             </span>
                             <a class="float-right cursor-pointer" @click="$store.commit('profile/dismissUpdateAll')">
                                 <i class="fas fa-times" />

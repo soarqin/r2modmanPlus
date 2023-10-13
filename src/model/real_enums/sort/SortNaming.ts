@@ -1,8 +1,8 @@
 export enum SortNaming {
 
-    CUSTOM = "Custom",
-    MOD_NAME = "Mod name",
-    AUTHOR = "Author name",
-    INSTALL_DATE = "Install date",
+    CUSTOM = "不改变",
+    MOD_NAME = "Mod名",
+    AUTHOR = "作者名",
+    INSTALL_DATE = "安装时间",
 
 }

@@ -9,41 +9,33 @@
                     <h5 class="title is-5">{{error && error.name}}</h5>
                     <p>{{error && error.message}}</p>
                     <br />
-                    <h5 class="title is-5">Suggestion</h5>
+                    <h5 class="title is-5">建议</h5>
 
                     <p v-if="phase === PHASES.GAME_FAILED">
-                        This is a problem with the mod manager itself.
-                        If there's a newer version of the manager
-                        available, try installing it.
+                        这是mod管理器自身的问题。
+                        如果管理器有新版本请更新版本。
                     </p>
 
                     <div v-else-if="phase === PHASES.SETTINGS_FAILED">
                         <p>
-                            Loading of local user settings failed. You
-                            can use the button below to reset the
-                            settings, but note that all settings for all
-                            games will be lost and this can't be undone.
+                            无法加载本地用户设置。你可以点击下面的按钮重置设置，但注意这样所有游戏的所有设置都会被还原。
                         </p>
                         <br />
                         <button @click="resetSettings" class="button is-white">
-                            Reset settings
+                            重置设置
                         </button>
                     </div>
 
                     <p v-else-if="phase === PHASES.RESET_FAILED">
-                        Resetting of the settings failed. You can still
-                        try to reset the settings manually by following
-                        these
+                        无法重置设置。你可以常识按照此
                         <a @click="openLink('https://github.com/ebkr/r2modmanPlus/wiki/Error:-White-or-blank-game-select-screen-on-startup#corrupted-settings-on-update')">
-                            instructions.
-                        </a>
+                            说明
+                        </a>进行手动重置。
                     </p>
 
                     <p v-else-if="phase === PHASES.RETRY_FAILED">
-                        Locally stored settings were reset, but that
-                        didn't solve the issue with loading the
-                        settings. If there's a newer version of the
-                        manager available, try installing it.
+                        本地存储的设置已被还原，但依然没有解决无法加载设置的问题。
+                        如果管理器有新版本请更新版本。
                     </p>
                 </div>
             </div>
@@ -97,7 +89,7 @@ export default class SettingsLoader extends Vue {
         try {
             settings = await ManagerSettings.getSingleton(game);
         } catch (e) {
-            this.handleError("Failed to read ManagerSettings", `${e}`);
+            this.handleError("无法加载管理器设置", `${e}`);
             this.phase = isRetry ? PHASES.RETRY_FAILED : PHASES.SETTINGS_FAILED;
             return;
         }
@@ -107,7 +99,7 @@ export default class SettingsLoader extends Vue {
             // .getSingleton() should have done it already.
             error = await settings.load(true);
         } catch (e) {
-            this.handleError("Failed to load ManagerSettings", `${e}`);
+            this.handleError("无法加载管理器设置", `${e}`);
             this.phase = isRetry ? PHASES.RETRY_FAILED : PHASES.SETTINGS_FAILED;
             return;
         }
@@ -125,7 +117,7 @@ export default class SettingsLoader extends Vue {
         try {
             await this.resetIndexedDB();
         } catch (e) {
-            this.handleError("Failed to reset IndexedDB", `${e}`);
+            this.handleError("无法重置索引数据库", `${e}`);
             this.phase = PHASES.RESET_FAILED;
             return;
         }
@@ -138,7 +130,7 @@ export default class SettingsLoader extends Vue {
             // We know by now that getDefaultGame is safe to use.
             await this.loadSettings(getDefaultGame());
         } catch (e) {
-            this.handleError("Unexpected ManagerSettings error", `${e}`);
+            this.handleError("意外的管理器设置错误", `${e}`);
             this.phase = PHASES.RETRY_FAILED;
         }
     }
@@ -148,7 +140,7 @@ export default class SettingsLoader extends Vue {
 
         return new Promise<void>((resolve, reject) => {
             DBDeleteRequest.onsuccess = () => resolve();
-            DBDeleteRequest.onerror = () => reject("Deleting settings database failed");
+            DBDeleteRequest.onerror = () => reject("无法删除设置数据库");
         });
     }
 
@@ -158,7 +150,7 @@ export default class SettingsLoader extends Vue {
         try {
             defaultGame = getDefaultGame();
         } catch (e) {
-            this.handleError("Failed to read game definitions", `${e}`);
+            this.handleError("无法读取游戏定义文件", `${e}`);
             this.phase = PHASES.GAME_FAILED;
             return;
         }
@@ -166,7 +158,7 @@ export default class SettingsLoader extends Vue {
         try {
             await this.loadSettings(defaultGame);
         } catch (e) {
-            this.handleError("Unexpected ManagerSettings error", `${e}`);
+            this.handleError("意外的管理器设置错误", `${e}`);
             this.phase = PHASES.SETTINGS_FAILED;
         }
     }
@@ -175,7 +167,7 @@ export default class SettingsLoader extends Vue {
 const getDefaultGame = () => {
     // Don't trust the non-null asserted typing of GameManager.defaultGame.
     if (GameManager.defaultGame === undefined) {
-        throw new Error("GameManager.defaultGame returned undefined");
+        throw new Error("GameManager.unsetGame() 返回了未定义值");
     }
 
     return GameManager.defaultGame;

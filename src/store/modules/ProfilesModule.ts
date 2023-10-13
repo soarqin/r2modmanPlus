@@ -34,7 +34,7 @@ export const ProfilesModule = {
                 await FileUtils.emptyDirectory(path);
                 await FsProvider.instance.rmdir(path);
             } catch (e) {
-                throw R2Error.fromThrownValue(e, 'Error whilst deleting profile from disk');
+                throw R2Error.fromThrownValue(e, '删除用户配置时发生错误');
             }
 
             state.profileList = state.profileList.filter((p: string) => p !== profileName || p === 'Default')
@@ -60,7 +60,7 @@ export const ProfilesModule = {
                     path.join(Profile.getDirectory(), params.newName)
                 );
             } catch (e) {
-                throw R2Error.fromThrownValue(e, 'Error whilst renaming a profile on disk');
+                throw R2Error.fromThrownValue(e, '用户配置改名时发生错误');
             }
             await dispatch('setSelectedProfile', { profileName: params.newName, prewarmCache: false });
             await dispatch('updateProfileList');

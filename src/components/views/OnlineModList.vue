@@ -8,15 +8,15 @@
             <template v-slot:title>
                 <span v-if="key.isPinned()">
                     <span class="tag is-info margin-right margin-right--half-width"
-                          v-tooltip.right="'Pinned on Thunderstore'">
-                        Pinned
+                          v-tooltip.right="'Thunderstore置顶'">
+                        置顶
                     </span>
                     <span class="selectable">{{key.getName()}} <span class="card-byline">by {{key.getOwner()}}</span></span>
                 </span>
                 <span v-else-if="isModDeprecated(key)">
                     <span class="tag is-danger margin-right margin-right--half-width"
-                          v-tooltip.right="'This mod is potentially broken'">
-                        Deprecated
+                          v-tooltip.right="'可能功能已经失效'">
+                        已启用
                     </span>
                     <strike class="selectable">{{key.getName()}} <span class="card-byline">by {{key.getOwner()}}</span></strike>
                 </span>
@@ -27,20 +27,20 @@
             <template v-slot:other-icons>
                 <span class='card-header-icon' v-if="key.getDonationLink()">
                     <Link :url="key.getDonationLink()" target="external" tag="span">
-                        <i class='fas fa-heart' v-tooltip.left="'Donate to the mod author'"></i>
+                        <i class='fas fa-heart' v-tooltip.left="'捐赠给mod作者'"></i>
                     </Link>
                 </span>
                 <span class='card-header-icon' v-if="isThunderstoreModInstalled(key)">
-                    <i class='fas fa-check' v-tooltip.left="'Mod already installed'"></i>
+                    <i class='fas fa-check' v-tooltip.left="'mod已安装'"></i>
                 </span>
             </template>
             <template v-slot:description>
-                <p class='card-timestamp'><strong>Last updated:</strong> {{getReadableDate(key.getDateUpdated())}}</p>
-                <p class='card-timestamp'><strong>Categories:</strong> {{getReadableCategories(key)}}</p>
+                <p class='card-timestamp'><strong>最后更新:</strong> {{getReadableDate(key.getDateUpdated())}}</p>
+                <p class='card-timestamp'><strong>分类:</strong> {{getReadableCategories(key)}}</p>
             </template>
-            <a class='card-footer-item' @click='showDownloadModal(key)'>Download</a>
+            <a class='card-footer-item' @click='showDownloadModal(key)'>下载</a>
             <Link :url="key.getPackageUrl()" :target="'external'" class='card-footer-item'>
-                Website <i class="fas fa-external-link-alt margin-left margin-left--half-width"></i>
+                网站 <i class="fas fa-external-link-alt margin-left margin-left--half-width"></i>
             </Link>
             <template v-if="key.getDonationLink() !== undefined">
                 <DonateButton :mod="key"/>

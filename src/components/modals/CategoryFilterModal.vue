@@ -1,12 +1,12 @@
 <template>
     <modal v-show="isOpen" :open="isOpen" :show-close="false">
         <template v-slot:title>
-            <p class="card-header-title">Filter mod categories</p>
+            <p class="card-header-title">mod分类过滤</p>
         </template>
         <template v-slot:body>
             <div>
                 <CategorySelectorModal
-                    title="Mods must contain at least one of these categories"
+                    title="必须包含其中一个分类"
                     :selected-categories="selectedCategoriesCompareOne"
                     :selectable-categories="unselectedCategories"
                     @selected-category="selectCompareOneCategory"
@@ -14,7 +14,7 @@
                 />
                 <hr/>
                 <CategorySelectorModal
-                    title="Mods must contain all of these categories"
+                    title="必须包含其中全部分类"
                     :selected-categories="selectedCategoriesCompareAll"
                     :selectable-categories="unselectedCategories"
                     @selected-category="selectCompareAllCategory"
@@ -22,7 +22,7 @@
                 />
                 <hr/>
                 <CategorySelectorModal
-                    title="Mods cannot contain any of these categories"
+                    title="不能包含其中任意分类"
                     :selected-categories="selectedCategoriesToExclude"
                     :selectable-categories="unselectedCategories"
                     @selected-category="selectToExcludeCategory"
@@ -39,7 +39,7 @@
                         type="checkbox"
                         :class="[{'is-dark': !isDarkTheme, 'is-white': isDarkTheme}]"
                     >
-                    <label for="nsfwCheckbox">Allow NSFW (potentially explicit) mods</label>
+                    <label for="nsfwCheckbox">允许NSFW(可能裸露)mod</label>
                 </div>
                 <div>
                     <input
@@ -49,13 +49,13 @@
                         type="checkbox"
                         :class="[{'is-dark': !isDarkTheme, 'is-white': isDarkTheme}]"
                     >
-                    <label for="showDeprecatedCheckbox">Show deprecated mods</label>
+                    <label for="showDeprecatedCheckbox">显示弃用的mod</label>
                 </div>
             </div>
         </template>
         <template v-slot:footer>
             <button class="button is-info" @click="close">
-                Apply filters
+                应用过滤器
             </button>
         </template>
     </modal>

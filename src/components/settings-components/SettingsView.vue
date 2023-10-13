@@ -1,15 +1,15 @@
 <template>
     <div>
-        <Hero title='Settings'
-              :subtitle='`Advanced options for ${appName}: ` + managerVersionNumber.toString()'
+        <Hero title='设置'
+              :subtitle='`${appName}: ` + managerVersionNumber.toString() + ` 的高级选项`'
               heroType='is-info'/>
         <div class="margin-right">
             <div class="sticky-top sticky-top--opaque sticky-top--no-shadow sticky-top--no-padding">
                 <div class='border-at-bottom'>
                     <div class='card is-shadowless is-square'>
                         <div class='card-header-title'>
-                            <span class="non-selectable margin-right">Search:</span>
-                            <input v-model='search' class="input" type="text" placeholder="Search for a setting"/>
+                            <span class="non-selectable margin-right" style="white-space: nowrap">搜索:</span>
+                            <input v-model='search' class="input" type="text" placeholder="搜索选项"/>
                         </div>
                     </div>
                 </div>
@@ -18,7 +18,7 @@
                         <li v-for="(key, index) in tabs" :key="`tab-${key}`"
                             :class="[{'is-active': activeTab === key}]"
                             @click="changeTab(key)">
-                            <a>{{key}}</a>
+                            <a>{{tabToText(key)}}</a>
                         </li>
                     </ul>
                 </div>
@@ -96,11 +96,23 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
             return ManagerInformation.APP_NAME;
         }
 
+        tabToText(str: string): string {
+            switch (str) {
+            case 'All': return '全部';
+            case 'Profile': return '用户配置';
+            case 'Locations': return '路径配置';
+            case 'Debugging': return '调试';
+            case 'Modpacks': return 'Mod包';
+            case 'Other': return '其他';
+            default: return '';
+            }
+        }
+
         private settingsList = [
             new SettingsRow(
                 'Locations',
-                'Browse data folder',
-                'Open the directory where mods are stored for all games and profiles.',
+                '浏览数据目录',
+                '打开所有游戏mod及其用户配置所属的目录。',
                 async () => PathResolver.ROOT,
                 'fa-door-open',
                 () => {
@@ -109,8 +121,8 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
             ),
             new SettingsRow(
                 'Locations',
-                `Change ${this.activeGame.displayName} directory`,
-                `Change the location of the ${this.activeGame.displayName} directory that ${this.appName} uses.`,
+                `切换 ${this.activeGame.displayName} 游戏目录`,
+                `切换 ${this.appName} 运行 ${this.activeGame.displayName} 的游戏路径。`,
                 async () => {
                     if (this.settings.getContext().gameSpecific.gameDirectory !== null) {
                         const directory = await GameDirectoryResolverProvider.instance.getDirectory(this.activeGame);
@@ -118,7 +130,7 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
                             return directory;
                         }
                     }
-                    return 'Please set manually';
+                    return '请手动设置';
                 },
                 'fa-folder-open',
                 () => {
@@ -132,8 +144,8 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
             ),
             new SettingsRow(
                 'Locations',
-                'Browse profile folder',
-                'Open the folder where mods are stored for the current profile.',
+                '浏览用户配置目录',
+                '打开当前用户配置目录。',
                 async () => {
                     return this.$store.getters['profile/activeProfile'].getPathOfProfile();
                 },
@@ -142,8 +154,8 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
             ),
             new SettingsRow(
                 'Locations',
-                'Change data folder directory',
-                'Change the directory where mods are stored for all games and profiles. The folder will not be deleted, and existing profiles will not carry across.',
+                '切换数据文件路径',
+                '切换所有游戏mod和用户配置存储的路径，原目录不会被删除，数据不会被转移到新目录。',
                 async () => {
                     return PathResolver.ROOT;
                 },
@@ -152,45 +164,45 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
             ),
             new SettingsRow(
                 'Debugging',
-                'Copy log file contents to clipboard',
-                'Copy the text inside the LogOutput.log file to the clipboard, with Discord formatting.',
+                '复制log文件内容到剪贴板',
+                '复制LogOutput.log文件内容到剪贴板，使用Discord格式。',
                 async () => this.doesLogFileExist(),
                 'fa-clipboard',
                 () => this.emitInvoke('CopyLogToClipboard')
             ),
             new SettingsRow(
                 'Debugging',
-                'Toggle download cache',
-                'Downloading a mod will ignore mods stored in the cache. Mods will still be placed in the cache.',
+                '切换下载缓存',
+                '下载mod时忽略存储在缓存里的数据。之后下载的mod数据依然会被保存在cache里。',
                 async () => {
                     return this.settings.getContext().global.ignoreCache
-                        ? 'Current: cache is disabled'
-                        : 'Current: cache is enabled (recommended)';
+                        ? '当前设置：缓存已禁用'
+                        : '当前设置：缓存已启用(推荐)';
                 },
                 'fa-exchange-alt',
                 () => this.emitInvoke('ToggleDownloadCache')
             ),
             new SettingsRow(
                 'Debugging',
-                'Run preloader fix',
-                'Run this to fix most errors mentioning the preloader, or about duplicate assemblies.',
-                async () => `This will delete the ${this.activeGame.dataFolderName}/Managed folder, and verify the files through Steam`,
+                '修复preloader',
+                '点击可以修复大多数preloader的报错或重复的程序集。',
+                async () => `这将删除"${this.activeGame.dataFolderName}/Managed"目录并调用Steam的完整性检查`,
                 'fa-wrench',
                 () => this.emitInvoke('RunPreloaderFix')
             ),
             new SettingsRow(
                 'Debugging',
-                'Set launch parameters',
-                'Provide custom arguments used to start the game.',
-                async () => 'These commands are used against the Steam executable on game startup',
+                '设置启动参数',
+                '提供自定义的游戏启动参数。',
+                async () => '这些参数将加在Steam可执行文件启动游戏的完整命令行最后',
                 'fa-wrench',
                 () => this.emitInvoke('SetLaunchParameters')
             ),
             new SettingsRow(
                 'Debugging',
-                'Clean mod cache',
-                'Free extra space caused by cached mods that are not currently in a profile.',
-                async () => 'Check all profiles for unused mods and clear cache',
+                '清理mod缓存',
+                '清理不属于任何用户配置的额外缓存以释放磁盘空间。',
+                async () => '检查所有用户配置并清理缓存',
                 'fa-trash',
                 () => this.emitInvoke('CleanCache')
             ),
@@ -204,119 +216,116 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
             ),
             new SettingsRow(
                 'Profile',
-                'Change profile',
-                'Change the mod profile.',
+                '切换用户配置',
+                '切换mod的用户配置。',
                 async () => {
-                    return `Current profile: ${this.$store.getters['profile/activeProfile'].getProfileName()}`
+                    return `当前用户配置: ${this.$store.getters['profile/activeProfile'].getProfileName()}`
                 },
                 'fa-file-import',
                 () => this.emitInvoke('ChangeProfile')
             ),
             new SettingsRow(
                 'Profile',
-                'Enable all mods',
-                'Enable all mods for the current profile',
-                async () => `${this.localModList.length - ProfileModList.getDisabledModCount(this.localModList)}/${this.localModList.length} enabled`,
+                '启用所有mod',
+                '启用当前用户配置的所有mod。',
+                async () => `${this.localModList.length - ProfileModList.getDisabledModCount(this.localModList)}/${this.localModList.length} 已启用`,
                 'fa-file-import',
                 () => this.emitInvoke('EnableAll')
             ),
             new SettingsRow(
                 'Profile',
-                'Disable all mods',
-                'Disable all mods for the current profile',
-                async () => `${ProfileModList.getDisabledModCount(this.localModList)}/${this.localModList.length} disabled`,
+                '禁用所有mod',
+                '禁用当前用户配置的所有mod。',
+                async () => `${ProfileModList.getDisabledModCount(this.localModList)}/${this.localModList.length} 已禁用`,
                 'fa-file-import',
                 () => this.emitInvoke('DisableAll')
             ),
             new SettingsRow(
                 'Profile',
-                'Import local mod',
-                'Install a mod offline from your files.',
-                async () => 'Not all mods can be installed locally',
+                '导入本地mod',
+                '从本地文件离线安装mod。',
+                async () => '并非所有mod都可以本地安装',
                 'fa-file-import',
                 () => this.emitInvoke('ImportLocalMod')
             ),
             new SettingsRow(
                 'Profile',
-                'Export profile as a file',
-                'Export your mod list and configs as a file.',
-                async () => 'The exported file can be shared with friends to get an identical profile quickly and easily',
+                '导出用户配置为文件',
+                '将mod列表和配置导出为文件。',
+                async () => '导出的文件可以和朋友共享以便捷地获得完全相同的游戏体验',
                 'fa-file-export',
                 () => this.emitInvoke('ExportFile')
             ),
             new SettingsRow(
                 'Profile',
-                'Export profile as a code',
-                'Export your mod list and configs as a code.',
-                async () => 'The exported code can be shared with friends to get an identical profile quickly and easily',
+                '导出用户配置为代码',
+                '将mod列表和配置导出为代码。',
+                async () => '导出的代码可以和朋友共享以便捷地获得完全相同的游戏体验',
                 'fa-file-export',
                 () => this.emitInvoke('ExportCode')
             ),
             new SettingsRow(
                 'Profile',
-                'Update all mods',
-                'Quickly update every installed mod to their latest versions.',
+                '更新所有mod',
+                '一键更新所有已安装mod到最新版本。',
                 async () => {
                     const outdatedMods = this.$store.getters['profile/modsWithUpdates'];
-                    if (outdatedMods.length === 1) {
-                        return "1 mod has an update available";
-                    }
-                    return `${outdatedMods.length} mods have an update available`;
+                    return `${outdatedMods.length}个mod有可用更新`;
                 },
                 'fa-cloud-upload-alt',
                 () => this.emitInvoke('UpdateAllMods')
             ),
             new SettingsRow(
                 'Other',
-                'Toggle funky mode',
-                'Enable/disable funky mode.',
+                '切换funky模式',
+                '启用/禁用funky模式。',
                 async () => {
                     return this.settings.getContext().global.funkyModeEnabled
-                        ? 'Current: enabled'
-                        : 'Current: disabled (default)';
+                        ? '当前配置：启用'
+                        : '当前配置：禁用(默认)';
                 },
                 'fa-exchange-alt',
                 () => this.emitInvoke('ToggleFunkyMode')
             ),
             new SettingsRow(
                 'Other',
-                'Switch theme',
-                'Switch between light and dark themes.',
+                '切换主题',
+                '在亮暗主题之间切换。',
                 async () => {
                     return this.settings.getContext().global.darkTheme
-                        ? 'Current: dark theme'
-                        : 'Current: light theme (default)';
+                        ? '当前配置：黑暗主题'
+                        : '当前配置：明亮主题(默认)';
                 },
                 'fa-exchange-alt',
                 () => this.emitInvoke('SwitchTheme')
             ),
             new SettingsRow(
                 'Other',
-                'Switch card display type',
-                'Switch between expanded or collapsed cards.',
+                '切换卡片展示方式',
+                '切换卡片展示为展开或折叠形态。',
                 async () => {
                     return this.settings.getContext().global.expandedCards
-                        ? 'Current: expanded'
-                        : 'Current: collapsed (default)';
+                        ? '当前配置：展开'
+                        : '当前配置：折叠(默认)';
                 },
                 'fa-exchange-alt',
                 () => this.emitInvoke('SwitchCard')
             ),
             new SettingsRow(
                 'Other',
-                'Refresh online mod list',
-                'Check for any new mod releases.',
+                '刷新在线mod列表',
+                '下载mod列表以检查更新。',
                 async () => {
                         if (this.$store.state.tsMods.isBackgroundUpdateInProgress) {
-                            return "Checking for new releases";
+                            return "正在检查mod更新";
                         }
                         if (this.$store.state.tsMods.connectionError.length > 0) {
-                            return "Error getting new mods: " + this.$store.state.tsMods.connectionError;
+                            return "无法获取mod更新: " + this.$store.state.tsMods.connectionError;
                         }
                         if (this.$store.state.tsMods.modsLastUpdated !== undefined) {
-                            return "Cache date: " + moment(this.$store.state.tsMods.modsLastUpdated).format("MMMM Do YYYY, h:mm:ss a");
+                            return "缓存时间: " + moment(this.$store.state.tsMods.modsLastUpdated).format("MMMM Do YYYY, h:mm:ss a");
                         }
-                        return "No API information available";
+                        return "没有可用的API信息";
                     },
                 'fa-exchange-alt',
                 async () => {
@@ -338,8 +347,8 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
             ),
             new SettingsRow(
               'Other',
-              'Change game',
-              'Change the current game (restarts the manager)',
+              '切换游戏',
+              '切换当前选择的游戏 (将重启管理器)。',
               async () => "",
                 'fa-gamepad',
                 async () => {
@@ -349,9 +358,9 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
             ),
             new SettingsRow(
                 'Modpacks',
-                'Show dependency strings',
-                'View a list of installed mods with their version strings. Used inside the dependencies array inside the manifest.json file.',
-                async () => `Show dependency strings for ${this.localModList.length} mod(s)`,
+                '显示依赖字符串列表',
+                '显示已安装的mod列表在manifest内的依赖字符串形式。',
+                async () => `显示${this.localModList.length}个mod的依赖字符串`,
                 'fa-file-alt',
                 () => this.emitInvoke('ShowDependencyStrings')
             ),
@@ -375,8 +384,8 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
                 this.settingsList.push(
                     new SettingsRow(
                         'Locations',
-                        'Change Steam directory',
-                        `Change the location of the Steam directory that ${this.appName} uses.`,
+                        '切换Steam路径',
+                        `切换${this.appName}使用的Steam安装路径。`,
                         async () => {
                             if (this.settings.getContext().global.steamDirectory !== null) {
                                 const directory = await GameDirectoryResolverProvider.instance.getSteamDirectory();
@@ -384,7 +393,7 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
                                     return directory;
                                 }
                             }
-                            return 'Please set manually';
+                            return '请手动设置';
                         },
                         'fa-folder-open',
                         () => this.emitInvoke('ChangeSteamDirectory')
@@ -414,7 +423,7 @@ import CdnProvider from '../../providers/generic/connection/CdnProvider';
         }
 
         doesLogFileExist() {
-            return this.logOutput.exists ? 'Log file exists' : 'Log file does not exist';
+            return this.logOutput.exists ? 'Log文件存在' : 'Log文件不存在';
         }
     }
 </script>

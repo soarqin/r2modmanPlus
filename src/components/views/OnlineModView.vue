@@ -4,17 +4,17 @@
             <div class="is-shadowless is-square">
                 <div class="no-padding-left card-header-title">
                     <div class="input-group input-group--flex margin-right">
-                        <label for="thunderstore-search-filter">Search</label>
+                        <label for="thunderstore-search-filter">搜索</label>
                         <DeferredInput
                             v-model="thunderstoreSearchFilter"
                             id="thunderstore-search-filter"
                             class="input"
                             type="text"
-                            placeholder="Search for a mod"
+                            placeholder="搜索mod"
                         />
                     </div>
                     <div class="input-group margin-right">
-                        <label for="thunderstore-sort">Sort</label>
+                        <label for="thunderstore-sort">排序</label>
                         <select v-model="sortingStyleModel"
                                 id="thunderstore-sort"
                                 class="select select--content-spacing margin-right margin-right--half-width"
@@ -23,20 +23,20 @@
                         </select>
                         <select v-model="sortingDirectionModel"
                                 class="select select--content-spacing"
-                                :disabled="sortingStyleModel === 'Default'"
+                                :disabled="sortingStyleModel === '默认'"
                         >
                             <option v-for="(key) in getSortDirections()" v-bind:key="key">{{key}}</option>
                         </select>
                     </div>
                     <div class="input-group">
                         <div class="input-group input-group--flex">
-                            <label for="thunderstore-category-filter">Additional filters</label>
+                            <label for="thunderstore-category-filter">其他过滤器</label>
                             <button
                                 id="thunderstore-category-filter"
                                 class="button"
                                 @click="$store.commit('openCategoryFilterModal')"
                             >
-                                Filter categories
+                                分类过滤器
                             </button>
                         </div>
                     </div>
@@ -49,12 +49,12 @@
         />
         <div class="in-mod-list" v-if="getPaginationSize() > 1">
             <p class="notification margin-right">
-                Use the numbers below to change page
+                使用底部的数字翻页
             </p>
         </div>
         <div class="in-mod-list" v-else-if="getPaginationSize() === 0">
             <p class="notification margin-right">
-                {{thunderstoreModList.length ? "No mods matching search found": "No mods available"}}
+                {{thunderstoreModList.length ? "找不到匹配的mod": "mod列表为空"}}
             </p>
         </div>
         <br/>

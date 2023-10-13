@@ -126,7 +126,7 @@ export const TsModsModule = {
             if (typeof error === 'string') {
                 state.connectionError = error;
             } else {
-                const msg = error instanceof Error ? error.message : "Unknown error";
+                const msg = error instanceof Error ? error.message : "未知错误";
                 state.connectionError = msg;
             }
         },

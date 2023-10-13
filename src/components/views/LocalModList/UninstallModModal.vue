@@ -28,8 +28,8 @@ export default class UninstallModModal extends Vue {
     get mod(): ManifestV2 {
         if (this.$store.state.modals.uninstallModModalMod === null) {
             throw new R2Error(
-                'Error while opening UninstallModModal',
-                'Mod not provided'
+                '打开UninstallModModal时发生错误',
+                '未提供mod'
             );
         }
         return this.$store.state.modals.uninstallModModalMod;
@@ -69,17 +69,16 @@ export default class UninstallModModal extends Vue {
 <template>
     <ModalCard v-if="isOpen" :is-active="true" :can-close="!isLocked" @close-modal="onClose">
         <template v-slot:header>
-            <p class='modal-card-title'>Uninstalling {{mod.getName()}}</p>
+            <p class='modal-card-title'>正在卸载{{mod.getName()}}</p>
         </template>
         <template v-slot:body>
             <div class="max-height-100 is-flex is-flex-direction-column">
                 <div class='notification is-warning'>
                     <p>
-                        Other mods depend on this mod. Select <strong>Uninstall all</strong>
-                        to uninstall dependent mods, otherwise they may cause errors.
+                        其他mod对此mod有依赖。选择<strong>卸载全部</strong>以卸载全部相关mod，否则他们可能会发生错误。
                     </p>
                 </div>
-                <h3 class="subtitle mb-3">Mods to be uninstalled</h3>
+                <h3 class="subtitle mb-3">要卸载的mod列表</h3>
                 <div class="is-flex-shrink-1 overflow-auto code-snippet">
                     <ul class="list">
                         <li class="list-item">{{mod.getName()}}</li>
@@ -90,7 +89,7 @@ export default class UninstallModModal extends Vue {
                     </ul>
                 </div>
                 <div v-if="isLocked" class="mt-3">
-                    <h3 class="subtitle mb-3">Uninstalling {{modBeingUninstalled}}</h3>
+                    <h3 class="subtitle mb-3">正在卸载{{modBeingUninstalled}}</h3>
                     <progress class="progress is-small is-info"/>
                 </div>
             </div>
@@ -99,12 +98,12 @@ export default class UninstallModModal extends Vue {
             <button class="button is-info"
                     :disabled="isLocked"
                     @click="uninstallModIncludingDependants">
-                Uninstall all (recommended)
+                卸载全部(推荐)
             </button>
             <button class="button"
                     :disabled="isLocked"
                     @click="uninstallModExcludingDependants">
-                Uninstall {{mod.getName()}} only
+                仅卸载{{mod.getName()}}
             </button>
         </template>
     </ModalCard>

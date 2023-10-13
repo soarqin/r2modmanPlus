@@ -67,18 +67,18 @@ export default class SearchAndSort extends Vue {
             <div class="no-padding-left card-header-title">
 
                 <div class="input-group input-group--flex margin-right">
-                    <label for="local-search" class="non-selectable">Search</label>
+                    <label for="local-search" class="non-selectable">搜索</label>
                     <DeferredInput
                         v-model="search"
                         id="local-search"
                         class="input margin-right"
                         type="text"
-                        placeholder="Search for an installed mod"
+                        placeholder="搜索已安装的mod"
                     />
                 </div>
 
                 <div class="input-group margin-right">
-                    <label for="local-sort-order" class="non-selectable">Sort</label>
+                    <label for="local-sort-order" class="non-selectable">排序</label>
                     <select
                         v-model="order"
                         id="local-sort-order"
@@ -98,7 +98,7 @@ export default class SearchAndSort extends Vue {
                 </div>
 
                 <div class="input-group">
-                    <label for="local-deprecated-position" class="non-selectable">Disabled</label>
+                    <label for="local-deprecated-position" class="non-selectable">已禁用</label>
                     <select
                         v-model="disabledPosition"
                         id="local-deprecated-position"
