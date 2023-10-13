@@ -4,8 +4,8 @@
             <div class="modal-background" @click="downloadingMod = false;"></div>
             <div class='modal-content'>
                 <div class='notification is-info'>
-                    <h3 class='title'>Downloading {{downloadObject.modName}}</h3>
-                    <p>{{Math.floor(downloadObject.progress)}}% complete</p>
+                    <h3 class='title'>正在下载 {{downloadObject.modName}}</h3>
+                    <p>下载进度: {{Math.floor(downloadObject.progress)}}%</p>
                     <Progress
                         :max='100'
                         :value='downloadObject.progress'
@@ -20,13 +20,12 @@
             <div class="modal-content">
                 <div class='card'>
                     <header class="card-header">
-                        <p class='card-header-title' v-if="thunderstoreMod !== null">Select a version of
-                            {{thunderstoreMod.getName()}} to download
+                        <p class='card-header-title' v-if="thunderstoreMod !== null">选择要下载的 {{thunderstoreMod.getName()}} 版本
                         </p>
                     </header>
                     <div class='card-content'>
-                        <p>It's recommended to select the latest version of all mods.</p>
-                        <p>Using outdated versions may cause problems.</p>
+                        <p>推荐所有mod都下载最新的版本。</p>
+                        <p>使用过时的版本可能导致问题。</p>
                         <br/>
                         <div class="columns is-vcentered">
                             <template v-if="currentVersion !== null">
@@ -50,19 +49,19 @@
                             </div>
                             <div class="column is-narrow">
                                 <span class="tag is-dark" v-if='selectedVersion === null'>
-                                    You need to select a version
+                                    你需要选择一个版本
                                 </span>
                                 <span class="tag is-success" v-else-if='versionNumbers[0] === selectedVersion'>
-                                    {{selectedVersion}} is the latest version
+                                    {{selectedVersion}}是最新版本
                                 </span>
                                 <span class="tag is-danger" v-else-if='versionNumbers[0] !== selectedVersion'>
-                                    {{selectedVersion}} is an outdated version
+                                    {{selectedVersion}}是过时版本
                                 </span>
                             </div>
                         </div>
                     </div>
                     <div class='card-footer'>
-                        <button class="button is-info" @click="downloadThunderstoreMod()">Download with dependencies
+                        <button class="button is-info" @click="downloadThunderstoreMod()">下载(连同依赖)
                         </button>
                     </div>
                 </div>
@@ -73,22 +72,22 @@
             <div class="modal-content">
                 <div class='card'>
                     <header class="card-header">
-                        <p class='card-header-title'>Update all installed mods</p>
+                        <p class='card-header-title'>更新所有已安装的mod</p>
                     </header>
                     <div class='card-content'>
-                        <p>All installed mods will be updated to their latest versions.</p>
-                        <p>Any missing dependencies will be installed.</p>
-                        <p>The following mods will be downloaded and installed:</p>
+                        <p>所有已安装的mod会被更新到最新版本。</p>
+                        <p>所有缺失的依赖也会被安装。</p>
+                        <p>将会下载并安装以下mod:</p>
                         <br/>
                         <ul class="list">
                             <li class="list-item" v-for='(key, index) in getListOfModsToUpdate()'
                                 :key='`to-update-${index}-${key.getVersion().getFullName()}`'>
-                                {{key.getVersion().getName()}} will be updated to: {{key.getVersion().getVersionNumber().toString()}}
+                                {{key.getVersion().getName()}} 更新至: {{key.getVersion().getVersionNumber().toString()}}
                             </li>
                         </ul>
                     </div>
                     <div class='card-footer'>
-                        <button class="button is-info" @click="downloadLatest()">Update all</button>
+                        <button class="button is-info" @click="downloadLatest()">更新全部</button>
                     </div>
                 </div>
             </div>
@@ -176,7 +175,7 @@ let assignId = 0;
                                     await DownloadModModal.installModAfterDownload(profile, combo.getMod(), combo.getVersion());
                                 } catch (e) {
                                     const err: Error = e as Error;
-                                    return new R2Error(`Failed to install mod [${combo.getMod().getFullName()}]`, err.message, null);
+                                    return new R2Error(`无法安装 [${combo.getMod().getFullName()}]`, err.message, null);
                                 }
                             }
                             const modList = await ProfileModList.getModList(profile);
@@ -297,7 +296,7 @@ let assignId = 0;
                             await DownloadModModal.installModAfterDownload(this.contextProfile!, combo.getMod(), combo.getVersion());
                         } catch (e) {
                             const err: Error = e as Error;
-                            return new R2Error(`Failed to install mod [${combo.getMod().getFullName()}]`, err.message, null);
+                            return new R2Error(`无法安装 [${combo.getMod().getFullName()}]`, err.message, null);
                         }
                     }
                     this.downloadingMod = false;
@@ -358,7 +357,7 @@ let assignId = 0;
                                 await DownloadModModal.installModAfterDownload(this.contextProfile!, combo.getMod(), combo.getVersion());
                             } catch (e) {
                                 const err: Error = e as Error;
-                                return new R2Error(`Failed to install mod [${combo.getMod().getFullName()}]`, err.message, null);
+                                return new R2Error(`无法安装 [${combo.getMod().getFullName()}]`, err.message, null);
                             }
                         }
                         this.downloadingMod = false;

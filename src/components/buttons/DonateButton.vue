@@ -2,9 +2,9 @@
     <Link :url="mod.getDonationLink()"
           :target="'external'"
           class="card-footer-item"
-          v-tooltip.left="{content: 'Donate to the mod author', distance: 0}">
+          v-tooltip.left="{content: '捐赠Mod作者', distance: 0}">
         <i class='fas fa-heart margin-right margin-right--half-width'></i>
-        Donate
+        捐赠
     </Link>
 </template>
 

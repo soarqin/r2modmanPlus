@@ -3,10 +3,10 @@
 		<div class='notification is-warning' v-if="portableUpdateAvailable">
 			<div class='container'>
 				<p>
-					An update is available.
+					有可用更新。
 					<link-component :url="`https://github.com/ebkr/r2modmanPlus/releases/tag/${updateTagName}`"
 					                :target="'external'"
-					>Click here to go to the release page.
+					>点击跳转发布页面
 					</link-component>
 				</p>
 			</div>
@@ -15,9 +15,9 @@
 			<div class="modal-background" @click="showSteamIncorrectDirectoryModal = false"></div>
 			<div class='modal-content'>
 				<div class='notification is-danger'>
-					<h3 class='title'>Failed to set the Steam directory</h3>
-					<p>The steam executable was not selected.</p>
-					<p>If this error has appeared but the executable is correct, please run as administrator.</p>
+					<h3 class='title'>无法设置Steam路径</h3>
+					<p>未选择Steam可执行文件。</p>
+					<p>如果可执行文件无误，请尝试用管理员身份运行。</p>
 				</div>
 			</div>
 			<button class="modal-close is-large" aria-label="close"
@@ -27,9 +27,9 @@
 			<div class="modal-background" @click="showRor2IncorrectDirectoryModal = false"></div>
 			<div class='modal-content'>
 				<div class='notification is-danger'>
-					<h3 class='title'>Failed to set the {{ activeGame.displayName }} directory</h3>
-					<p>The executable must be either of the following: "{{ activeGame.exeName.join('", "') }}".</p>
-					<p>If this error has appeared but the executable is correct, please run as administrator.</p>
+					<h3 class='title'>无法设置{{ activeGame.displayName }}路径</h3>
+					<p>可执行文件名必须为以下之一: "{{ activeGame.exeName.join('", "') }}".</p>
+					<p>如果可执行文件无误，请尝试用管理员身份运行。</p>
 				</div>
 			</div>
 			<button class="modal-close is-large" aria-label="close"
@@ -37,30 +37,28 @@
 		</div>
 		<modal v-show="fixingPreloader" :open="fixingPreloader" @close-modal="closePreloaderFixModal">
 			<template v-slot:title>
-				<p class='card-header-title'>Attempting to fix preloader issues</p>
+				<p class='card-header-title'>尝试修正preloader的问题</p>
 			</template>
 			<template v-slot:body>
 				<div class='notification is-warning'>
-					<p>You will not not be able to launch the game until Steam has verified the integrity of the
-						game.
+					<p>Steam进行完整性验证后才能运行游戏。
 					</p>
 				</div>
-				<p>Steam will be started, and will attempt to verify the integrity of {{ activeGame.displayName }}.</p>
+				<p>现在将启动Steam并对{{ activeGame.displayName }}进行完整性验证。</p>
 				<br/>
-				<p>Please check the Steam window for validation progress. If the window has not yet appeared, please be
-					patient.
+				<p>请检查Steam窗口的验证进度。如果窗口没有显示，请耐心等待。
 				</p>
 			</template>
 			<template v-slot:footer>
 				<button v-if="dependencyListDisplayType === 'view'" class="button is-info"
 				        @click="closePreloaderFixModal()">
-					I understand
+					知道了
 				</button>
 			</template>
 		</modal>
         <modal v-show="showDependencyStrings" :open="showDependencyStrings" @close-modal="showDependencyStrings = false;">
             <template v-slot:title>
-                <p class='card-header-title'>Dependency string list</p>
+                <p class='card-header-title'>依赖字符串列表</p>
             </template>
             <template v-slot:body>
                 <ul>
@@ -78,20 +76,20 @@
         </modal>
 		<modal v-show="showLaunchParameterModal === true" :open="showLaunchParameterModal" @close-modal="() => {showLaunchParameterModal = false;}">
 			<template v-slot:title>
-				<p class='card-header-title'>Set custom launch parameters</p>
+				<p class='card-header-title'>设置自定义启动参数</p>
 			</template>
 			<template v-slot:body>
-				<p>Some parameters are provided by default:</p>
+				<p>当前默认参数:</p>
 				<br/>
-				<p>Modded:
+				<p>带Mod:
 					<br/>
 					<code v-if="doorstopTarget.length > 0">
 						{{ doorstopTarget }}
 					</code>
-                    <code v-else>These parameters will be available after installing a mod loader.</code>
+                    <code v-else>安装Mod加载器后这些参数就会生效。</code>
 				</p>
 				<br/>
-				<p>Vanilla:
+				<p>原始游戏:
 					<br>
 					<code>
 						{{ vanillaLaunchArgs }}
@@ -99,30 +97,28 @@
 				</p>
 				<br/>
 				<p>
-					<strong>Please note that these are called against the Steam executable. Be careful when
-						entering custom launch parameters.</strong>
+					<strong>注意这些参数是加在Steam可执行文件后面的，输入自定义参数时要小心。</strong>
 				</p>
 				<br/>
-				<input class='input' v-model='launchParametersModel' placeholder='Enter parameters'/>
+				<input class='input' v-model='launchParametersModel' placeholder='输入参数'/>
 			</template>
 			<template v-slot:footer>
 				<button class='button is-info' @click='updateLaunchParameters()'>
-					Update launch parameters
+					更新运行参数
 				</button>
 			</template>
 		</modal>
 		<modal v-show="exportCode !== ''" :open="exportCode !== ''" @close-modal="() => {exportCode = '';}">
 			<template v-slot:title>
-				<p class='card-header-title'>Profile exported</p>
+				<p class='card-header-title'>已导出用户配置</p>
 			</template>
 			<template v-slot:body>
-				<p>Your code: <strong>{{exportCode}}</strong> has been copied to your clipboard. Just give it to a
-					friend!
+				<p>你的代码: <strong>{{exportCode}}</strong> 已经复制到剪贴板。把它发给你的朋友吧！
 				</p>
 			</template>
 			<template v-slot:footer>
 				<button v-if="dependencyListDisplayType === 'view'" class="button is-info" @click="exportCode = ''">
-					Done
+					完成
 				</button>
 			</template>
 		</modal>
@@ -265,7 +261,7 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
 		changeGameInstallDirectory() {
 			const ror2Directory: string = this.settings.getContext().gameSpecific.gameDirectory || this.computeDefaultInstallDirectory();
 			InteractionProvider.instance.selectFile({
-                title: `Locate ${this.activeGame.displayName} Executable`,
+                title: `定位${this.activeGame.displayName}可执行文件`,
                 // Lazy reduce. Assume Linux name and Windows name are identical besides extension.
                 // Should fix if needed, although unlikely.
                 filters: (this.activeGame.exeName.map(value => {
@@ -279,7 +275,7 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
                     return previousValue;
                 })),
                 defaultPath: ror2Directory,
-                buttonLabel: 'Select Executable'
+                buttonLabel: '选择可执行文件'
             }).then(async files => {
                 if (files.length === 1) {
                     try {
@@ -292,7 +288,7 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
                     } catch (e) {
                         const err: Error = e as Error;
                         this.showError(new R2Error(
-                            "Failed to change the game directory",
+                            "无法改变游戏路径",
                             err.message,
                             null
                         ));
@@ -304,10 +300,10 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
 		changeGameInstallDirectoryGamePass() {
 			const ror2Directory: string = this.settings.getContext().gameSpecific.gameDirectory || this.computeDefaultInstallDirectory();
 			InteractionProvider.instance.selectFile({
-                title: `Locate gamelaunchhelper Executable`,
+                title: `定位gamelaunchhelper可执行文件`,
                 filters: [{ name: "gamelaunchhelper", extensions: ["exe"] }],
 				defaultPath: ror2Directory,
-				buttonLabel: 'Select Executable'
+				buttonLabel: '选择可执行文件'
 			}).then(async files => {
 				if (files.length === 1) {
 					try {
@@ -315,12 +311,12 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
 						if (containsGameExecutable) {
 							await this.settings.setGameDirectory(path.dirname(await FsProvider.instance.realpath(files[0])));
 						} else {
-							throw new Error("The selected executable is not gamelaunchhelper.exe");
+							throw new Error("选择的可执行文件不是gamelaunchhelper.exe");
 						}
 					} catch (e) {
 						const err: Error = e as Error;
 						this.showError(new R2Error(
-							"Failed to change the game directory",
+							"无法改变游戏路径",
 							err.message,
 							null
 						));
@@ -361,7 +357,7 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
 		changeSteamDirectory() {
 			const steamDir: string = this.settings.getContext().global.steamDirectory || this.computeDefaultSteamDirectory();
 			InteractionProvider.instance.selectFile({
-                title: 'Locate Steam Executable',
+                title: '定位Steam可执行文件',
                 defaultPath: steamDir,
                 filters: [{name: "steam", extensions: ["exe", "sh", "app"]}],
                 buttonLabel: 'Select Executable'
@@ -376,7 +372,7 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
                     } catch (e) {
 				        const err: Error = e as Error;
 				        this.showError(new R2Error(
-				            "Failed to change the Steam directory",
+				            "无法改变Steam路径",
                             err.message,
                             null
                         ));
@@ -530,9 +526,9 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
             const fs = FsProvider.instance;
             const dir: string = PathResolver.ROOT;
             InteractionProvider.instance.selectFolder({
-                title: `Select a new folder to store ${ManagerInformation.APP_NAME} data`,
+                title: `选择要存储${ManagerInformation.APP_NAME}数据的新路径`,
                 defaultPath: dir,
-                buttonLabel: 'Select Data Folder'
+                buttonLabel: '选择数据路径'
             }).then(async files => {
                 if (files.length === 1) {
                     const dataDirectoryOverrideFile = ".ddir.mm";
@@ -548,7 +544,7 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
                         await fs.writeFile(path.join(files[0], dataDirectoryOverrideFile), "");
                         InteractionProvider.instance.restartApp();
                     } else {
-                        this.showError(new R2Error("Selected directory is not empty", `Directory is not empty: ${files[0]}. Contains ${filesInDirectory.length} files.`, "Select an empty directory or create a new one."));
+                        this.showError(new R2Error("选择的不是空目录", `Directory is not empty: ${files[0]}. Contains ${filesInDirectory.length} files.`, "选择空目录或者创建一个新目录。"));
                         return;
                     }
                 }
@@ -647,7 +643,7 @@ import CategoryFilterModal from '../components/modals/CategoryFilterModal.vue';
 			if (!(newModList instanceof R2Error)) {
 				await this.$store.dispatch("updateModList", newModList);
 			} else {
-                LoggerProvider.instance.Log(LogSeverity.ACTION_STOPPED, `Failed to retrieve local mod list\n-> ${newModList.message}`);
+                LoggerProvider.instance.Log(LogSeverity.ACTION_STOPPED, `无法获取本地Mod列表\n-> ${newModList.message}`);
                 this.$emit('error', newModList);
 			}
 			this.$store.commit("modFilters/reset");

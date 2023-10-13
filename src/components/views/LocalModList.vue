@@ -6,12 +6,12 @@
                 <div class='no-padding-left card-header-title'>
 
                     <div class="input-group input-group--flex margin-right">
-                        <label for="local-search" class="non-selectable">Search</label>
-                        <input id="local-search" v-model='searchQuery' class="input margin-right" type="text" placeholder="Search for an installed mod"/>
+                        <label for="local-search" class="non-selectable">搜索</label>
+                        <input id="local-search" v-model='searchQuery' class="input margin-right" type="text" placeholder="搜索已安装的mod"/>
                     </div>
 
                     <div class="input-group margin-right">
-                        <label for="local-sort-order" class="non-selectable">Sort</label>
+                        <label for="local-sort-order" class="non-selectable">排序</label>
                         <select id="local-sort-order" class="select select--content-spacing margin-right margin-right--half-width" v-model="sortOrder">
                             <option v-for="(key, index) in getSortOrderOptions()" :key="`${index}-deprecated-position-option`">
                                 {{key}}
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="local-deprecated-position" class="non-selectable">Disabled</label>
+                        <label for="local-deprecated-position" class="non-selectable">已禁用mod</label>
                         <select id="local-deprecated-position" class="select select--content-spacing" v-model="sortDisabledPosition">
                             <option v-for="(key, index) in getDeprecatedFilterOptions()" :key="`${index}-deprecated-position-option`">
                                 {{key}}
@@ -40,25 +40,25 @@
         <Modal v-show="showingDependencyList" v-if="selectedManifestMod !== null"
                @close-modal="showingDependencyList = null" :open="showingDependencyList">
             <template v-slot:title>
-                <p v-if="dependencyListDisplayType === 'disable'" class='card-header-title'>Disabling
+                <p v-if="dependencyListDisplayType === 'disable'" class='card-header-title'>正在禁用
                     {{selectedManifestMod.getName()}}
                 </p>
-                <p v-if="dependencyListDisplayType === 'uninstall'" class='card-header-title'>Uninstalling
+                <p v-if="dependencyListDisplayType === 'uninstall'" class='card-header-title'>正在卸载
                     {{selectedManifestMod.getName()}}
                 </p>
-                <p v-if="dependencyListDisplayType === 'view'" class='card-header-title'>Mods associated with
-                    {{selectedManifestMod.getName()}}
+                <p v-if="dependencyListDisplayType === 'view'" class='card-header-title'>{{selectedManifestMod.getName()}}
+                    关联的mod
                 </p>
             </template>
             <template v-slot:body>
                 <div v-if="dependencyListDisplayType === 'disable'" class='notification is-warning'>
-                    <p>Other mods depend on this mod. Disabling this mod will disable all other dependants.</p>
+                    <p>其他依赖此mod的mod列表。禁用此mod会同时禁用所有依赖者。</p>
                 </div>
                 <div v-if="dependencyListDisplayType === 'uninstall'" class='notification is-warning'>
-                    <p>Other mods depend on this mod. Uninstalling this mod will remove all mods that depend on it.</p>
+                    <p>有其他mod依赖此mod。卸载此mod会同时卸载所有依赖者。</p>
                 </div>
-                <p v-if="dependencyListDisplayType === 'disable'">Mods to be disabled:</p>
-                <p v-if="dependencyListDisplayType === 'uninstall'">Mods to be uninstalled:</p>
+                <p v-if="dependencyListDisplayType === 'disable'">禁用的mod列表:</p>
+                <p v-if="dependencyListDisplayType === 'uninstall'">卸载的mod列表:</p>
                 <br v-if="dependencyListDisplayType !== 'view'"/>
                 <div v-if="dependencyListDisplayType !== 'view'">
                     <ul class="list">
@@ -71,7 +71,7 @@
                 </div>
                 <div v-if="dependencyListDisplayType === 'view'">
                     <div v-if="getDependencyList(selectedManifestMod).size > 0">
-                        <h3 class="subtitle is-5">Dependencies</h3>
+                        <h3 class="subtitle is-5">依赖于</h3>
                         <ul class="list">
                             <li class="list-item" v-for='(key, index) in getDependencyList(selectedManifestMod)'
                                 :key='`dependency-${index}`'>
@@ -81,7 +81,7 @@
                     </div>
                     <br v-if="getDependencyList(selectedManifestMod).size > 0"/>
                     <div v-if="getDependantList(selectedManifestMod).size > 0">
-                        <h3 class="subtitle is-5">Dependants</h3>
+                        <h3 class="subtitle is-5">依赖者</h3>
                         <ul class="list">
                             <li class="list-item" v-for='(key, index) in getDependantList(selectedManifestMod)'
                                 :key='`dependant-${index}`'>
@@ -94,15 +94,15 @@
             <template v-slot:footer>
                 <button v-if="dependencyListDisplayType === 'disable'" class="button is-info"
                         @click="disableMod(selectedManifestMod)">
-                    Disable
+                    禁用
                 </button>
                 <button v-if="dependencyListDisplayType === 'uninstall'" class="button is-info"
                         @click="uninstallMod(selectedManifestMod)">
-                    Uninstall
+                    卸载
                 </button>
                 <button v-if="dependencyListDisplayType === 'view'" class="button is-info"
                         @click="selectedManifestMod = null">
-                    Done
+                    完成
                 </button>
             </template>
         </Modal>
@@ -129,13 +129,13 @@
                     <span class="non-selectable">
                         <span v-if="key.isDeprecated()"
                               class="tag is-danger margin-right margin-right--half-width"
-                              v-tooltip.right="'This mod is deprecated and could be broken'">
-                            Deprecated
+                              v-tooltip.right="'这个mod已被启用，可能无法正常工作'">
+                            已启用
                         </span>
                         <span v-if="!key.isEnabled()"
                               class="tag is-warning margin-right margin-right--half-width"
-                              v-tooltip.right="'This mod will not be used in-game'">
-                            Disabled
+                              v-tooltip.right="'这个mod不会作用于游戏'">
+                            已禁用
                         </span>
                         <span class="card-title selectable">
                             <template v-if="key.isEnabled()">
@@ -151,34 +151,34 @@
                     <!-- Show update and missing dependency icons -->
                     <span class='card-header-icon' v-if="getThunderstoreModFromMod(key) && getThunderstoreModFromMod(key).getDonationLink()">
                         <Link :url="getThunderstoreModFromMod(key).getDonationLink()" target="external" tag="span">
-                            <i class='fas fa-heart' v-tooltip.left="'Donate to the mod author'"></i>
+                            <i class='fas fa-heart' v-tooltip.left="'捐赠给mod作者'"></i>
                         </Link>
                     </span>
                     <span class='card-header-icon'
                           @click.prevent.stop="updateMod(key)"
                           v-if="!isLatest(key)">
-                        <i class='fas fa-cloud-upload-alt' v-tooltip.left="'An update is available'"></i>
+                        <i class='fas fa-cloud-upload-alt' v-tooltip.left="'有可用的更新'"></i>
                     </span>
                     <span class='card-header-icon'
                           v-if="getMissingDependencies(key).length > 0">
-                        <i class='fas fa-exclamation-circle' v-tooltip.left="`Missing ${getMissingDependencies(key).length} dependencies`"></i>
+                        <i class='fas fa-exclamation-circle' v-tooltip.left="`缺少${getMissingDependencies(key).length}个依赖`"></i>
                     </span>
                     <span class='card-header-icon'
                           @click.prevent.stop="() => key.isEnabled() ? disableModRequireConfirmation(key) : enableMod(key)">
                         <div class="field">
                           <input id="switchExample" type="checkbox" name="switchExample" :class='`switch is-small  ${key.isEnabled() ? "switch is-info" : ""}`' :checked="key.isEnabled()">
-                          <label for="switchExample" v-tooltip.left="key.isEnabled() ? 'Disable' : 'Enable'"></label>
+                          <label for="switchExample" v-tooltip.left="key.isEnabled() ? '禁用' : '启用'"></label>
                         </div>
                     </span>
                 </template>
                 <a class='card-footer-item'
-                   @click="uninstallModRequireConfirmation(key)">Uninstall</a>
+                   @click="uninstallModRequireConfirmation(key)">卸载</a>
                 <template>
                     <a class='card-footer-item' @click="disableModRequireConfirmation(key)"
-                       v-if="key.enabled">Disable</a>
-                    <a class='card-footer-item' @click="enableMod(key)" v-else>Enable</a>
+                       v-if="key.enabled">禁用</a>
+                    <a class='card-footer-item' @click="enableMod(key)" v-else>启用</a>
                 </template>
-                <a class='card-footer-item' @click="viewDependencyList(key)">Associated</a>
+                <a class='card-footer-item' @click="viewDependencyList(key)">相关mod</a>
                 <Link :url="`${key.getWebsiteUrl()}${key.getVersionNumber().toString()}`"
                       :target="'external'"
                       class="card-footer-item">
@@ -188,7 +188,7 @@
                 <a class='card-footer-item' v-if="!isLatest(key)" @click="updateMod(key)">Update</a>
                 <a class='card-footer-item' v-if="getMissingDependencies(key).length > 0"
                    @click="downloadDependency(getMissingDependencies(key)[0])">
-                    Download dependency
+                    下载依赖
                 </a>
                 <template v-if="getThunderstoreModFromMod(key) !== undefined">
                     <template v-if="getThunderstoreModFromMod(key).getDonationLink() !== undefined">
@@ -577,9 +577,9 @@ import SearchUtils from '../../utils/SearchUtils';
             if (mod === undefined) {
                 this.$store.commit("closeDownloadModModal");
                 const error = new R2Error(
-                    `${missingDependency} could not be found`,
-                    'You may be offline, or the mod was removed from Thunderstore.',
-                    'The dependency may not yet be published to Thunderstore and may be available elsewhere.'
+                    `找不到 ${missingDependency}`,
+                    '可能是网络故障，或者mod已从Thunderstore下架。',
+                    '也可能依赖mod还没发布到Thunderstore或者可以在其他地方获取。'
                 );
                 this.$emit('error', error);
                 return;

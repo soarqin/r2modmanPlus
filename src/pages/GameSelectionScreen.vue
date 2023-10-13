@@ -2,10 +2,10 @@
     <div>
         <modal v-show="showPlatformModal === true" :open="showPlatformModal" @close-modal="() => {showPlatformModal = false;}" class="z-max z-top">
             <template v-slot:title>
-                <p class='card-header-title'>Which store manages your game?</p>
+                <p class='card-header-title'>你的游戏属于哪个平台？</p>
             </template>
             <template v-slot:body>
-                <p>Select a platform:</p>
+                <p>选择平台:</p>
                 <div v-if="selectedGame !== null">
                     <div v-for="(platform, index) of selectedGame.storePlatformMetadata" :key="`${index}-${platform.storePlatform.toString()}`">
                         <input type="radio" :id="`${index}-${platform.storePlatform.toString()}`" :value="platform.storePlatform" v-model="selectedPlatform"/>
@@ -15,23 +15,23 @@
             </template>
             <template v-slot:footer>
                 <button class='button is-info' @click='selectPlatform'>
-                    Select platform
+                    选择平台
                 </button>
             </template>
         </modal>
         <hero
-            :title="`${activeTab} selection`"
+            :title="`选择${activeTab === 'Game' ? '游戏' : '服务器'}`"
             :subtitle="
                 activeTab === 'Game'
-                    ? 'Which game are you managing your mods for?'
-                    : 'Which dedicated server are you managing your mods for?'
+                    ? '你要管理什么游戏的Mod？'
+                    : '你要管理什么服务器的Mod？'
             "
             :heroType="activeTab === 'Game' ? 'is-info' : 'is-warning'"
         />
         <div class="notification is-warning is-square" v-if="runningMigration">
             <div class="container">
-                <p>An update to the manager has occurred and needs to do background work.</p>
-                <p>The options to select a game are disabled until the work has completed.</p>
+                <p>正在后台更新管理器配置。</p>
+                <p>选择游戏的功能暂时关闭直到更新完成。</p>
             </div>
         </div>
         <div class="columns">
@@ -42,18 +42,18 @@
                             <div class="level-item">
                                 <div class="card-header-title">
                                     <div class="input-group input-group--flex margin-right">
-                                        <input id="local-search" v-model='filterText' class="input margin-right" type="text" placeholder="Search for a game"/>
+                                        <input id="local-search" v-model='filterText' class="input margin-right" type="text" placeholder="搜索游戏"/>
                                     </div>
                                 </div>
                             </div>
                             <div class="margin-right">
                                 <a class="button is-info"
-                                   :disabled="selectedGame === null && !this.runningMigration" @click="selectGame(selectedGame)">Select
-                                    {{ activeTab.toLowerCase() }}</a>
+                                   :disabled="selectedGame === null && !this.runningMigration" @click="selectGame(selectedGame)">选择
+                                    {{ activeTab === 'Game' ? '游戏' : '服务器' }}</a>
                             </div>
                             <div class="margin-right">
                                 <a class="button"
-                                   :disabled="selectedGame === null && !this.runningMigration" @click="selectDefaultGame(selectedGame)">Set as default</a>
+                                   :disabled="selectedGame === null && !this.runningMigration" @click="selectDefaultGame(selectedGame)">设为默认</a>
                             </div>
                             <div>
                                 <i class="button fas fa-th-large" @click="toggleViewMode"></i>
@@ -63,7 +63,7 @@
                             <div class="level-item">
                                 <div class="card-header-title">
                                     <div class="input-group input-group--flex margin-right">
-                                        <input id="local-search" v-model='filterText' class="input margin-right" type="text" placeholder="Search for a game"/>
+                                        <input id="local-search" v-model='filterText' class="input margin-right" type="text" placeholder="搜索游戏"/>
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +77,7 @@
                                     <ul class="text-center">
                                         <li v-for="(key, index) in gameInstanceTypes" :key="`tab-${key}`"
                                             :class="[{'is-active': activeTab === key}]">
-                                            <a @click="changeTab(key)">{{key}}</a>
+                                            <a @click="changeTab(key)">{{key === 'Game' ? '游戏' : '服务器'}}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -129,10 +129,9 @@
                                                                     </p>
                                                                 </div>
                                                                 <div class="absolute-center text-center">
-                                                                    <button class="button is-info" @click="selectGame(game)" :class="[{'is-disabled': selectedGame === null}]">Select
-                                                                        {{ activeTab.toLowerCase() }}</button>
+                                                                    <button class="button is-info" @click="selectGame(game)" :class="[{'is-disabled': selectedGame === null}]">选择{{ activeTab === 'Game' ? '游戏' : '服务器' }}</button>
                                                                     <br/><br/>
-                                                                    <button class="button" @click="selectDefaultGame(game)">Set as default</button>
+                                                                    <button class="button" @click="selectDefaultGame(game)">设为默认</button>
                                                                 </div>
                                                             </div>
                                                         </div>

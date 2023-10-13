@@ -1,14 +1,14 @@
 <template>
     <modal v-show="isOpen" :open="isOpen" :show-close="false">
         <template v-slot:title>
-            <p class="card-header-title">Filter mod categories</p>
+            <p class="card-header-title">mod分类过滤</p>
         </template>
         <template v-slot:body>
             <div class="input-group">
-                <label>Categories</label>
+                <label>分类</label>
                 <select class="select select--content-spacing" @change="selectCategory($event)">
                     <option selected disabled>
-                        Select a category
+                        选择分类
                     </option>
                     <option v-for="(key, index) in unselectedCategories" :key="`category--${key}-${index}`">
                         {{ key }}
@@ -17,7 +17,7 @@
             </div>
             <br/>
             <div class="input-group">
-                <label>Selected categories:</label>
+                <label>选择的分类:</label>
                 <div class="field has-addons" v-if="selectedCategories.length > 0">
                     <div class="control" v-for="(key, index) in selectedCategories" :key="`${key}-${index}`">
                         <span class="block margin-right">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="field has-addons" v-else>
                     <span class="tags">
-                        <span class="tag">No categories selected</span>
+                        <span class="tag">未选择分类</span>
                     </span>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                         type="checkbox"
                         :class="[{'is-dark': !isDarkTheme, 'is-white': isDarkTheme}]"
                     >
-                    <label for="nsfwCheckbox">Allow NSFW (potentially explicit) mods</label>
+                    <label for="nsfwCheckbox">允许NSFW(可能裸露)mod</label>
                 </div>
                 <div>
                     <input
@@ -58,7 +58,7 @@
                         type="checkbox"
                         :class="[{'is-dark': !isDarkTheme, 'is-white': isDarkTheme}]"
                     >
-                    <label for="showDeprecatedCheckbox">Show deprecated mods</label>
+                    <label for="showDeprecatedCheckbox">显示弃用的mod</label>
                 </div>
             </div>
             <br/>
@@ -80,7 +80,7 @@
         </template>
         <template v-slot:footer>
             <button class="button is-info" @click="close">
-                Apply filters
+                应用过滤器
             </button>
         </template>
     </modal>

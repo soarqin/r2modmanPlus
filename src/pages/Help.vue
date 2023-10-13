@@ -1,86 +1,81 @@
 <template>
     <div>
-        <Hero title="Help" subtitle="Common problems and their potential solutions" hero-type="is-info"/>
+        <Hero title="帮助" subtitle="常见问题以及可能的解决方案" hero-type="is-info"/>
         <div
             class="tabs sticky-top sticky-top--opaque sticky-top--no-shadow sticky-top--no-padding has-background-">
             <ul>
                 <li v-for="(key, index) in tabs" :key="`tab-${key}`"
                     :class="[{'is-active': activeTab === key}]"
                     @click="changeTab(key)">
-                    <a>{{key}}</a>
+                    <a>{{tabToText(key)}}</a>
                 </li>
             </ul>
         </div>
         <div class="container margin-right">
             <br/>
             <div ref="General" v-if="activeTab === 'General'">
-                <h2 class="title is-5">Getting started with installing mods</h2>
+                <h2 class="title is-5">上手开始安装mod</h2>
                 <p>
-                    Go to the "Online" tab, find a mod, and hit download.
-                    It'll also download the dependencies saving you time.
+                    去"在线Mod列表"页签，找到想下载的mod并点击下载按钮。
+                    所有依赖也会被同时下载。
                 </p>
-                <p>Once you've installed the mods you'd like, just click <strong>Start modded</strong> in the top left.</p>
+                <p>下载了需要的mod后，点击左上角的<strong>启用Mod开始游戏</strong>。</p>
                 <hr/>
-                <h2 class='title is-5'>Slow game with mods / stuttering?</h2>
+                <h2 class='title is-5'>加载mod后游戏拖慢/卡顿？</h2>
                 <p>
-                    This is likely due to a mod throwing errors.
-                    One solution is to attempt to disable half of your mods and check to see if the issue persists.
+                    很可能是mod抛出了异常。
+                    可以通过每次禁用一半mod的方法启动游戏看问题是否依然存在来排查到底是哪个mod出了问题。
+                    <br/><br/>
+                    对于卡顿，可能部分游戏有特定的优化mod来解决。
+                </p>
+                <hr/>
+                <h2 class='title is-5'>专用服务器</h2>
+                <p>
+                    mod管理器本身不直接支持专用服务器，你需要手动把用户配置目录里的内容复制到你的专用服务器里才能让mod生效。
+                </p>
+                <hr/>
+                <h2 class='title is-5'>从mod管理器外对游戏启用mod支持</h2>
+                <p>
+                    按照管理的设计，你从Steam启动游戏并不会加载mod。
+                    <br/><br/>
+                    你需要在游戏的启动参数里添加特定的参数才能在管理器外支持带mod开始游戏。
                     <br/>
-                    If the issue still remains then disable another half. Continue doing this until the issue is
-                    solved.
+                    对于Steam用户，可以在对应游戏的设置里找到添加参数的地方。
                     <br/><br/>
-                    In the case of stuttering there may be optimization mods to help with this.
-                </p>
-                <hr/>
-                <h2 class='title is-5'>Dedicated servers</h2>
-                <p>
-                    Dedicated servers aren't directly supported through the manager however a solution is to instead
-                    copy the contents of your profile folder into your dedicated server folder yourself.
-                </p>
-                <hr/>
-                <h2 class='title is-5'>Launching the game from outside the mod manager</h2>
-                <p>
-                    By design your experience by starting the game through Steam will be vanilla (un-modded).
-                    <br/><br/>
-                    You will need to place the corresponding argument in your platform's relevant launch parameter area.
-                    <br/>
-                    For Steam, this would be located in the game's properties.
-                    <br/><br/>
-                    Your current argument would be:
+                    当前用户配置对应的参数为:
                     <code v-if="doorstopTarget.length > 0">{{ doorstopTarget }}</code>
-                    <code v-else>These parameters will be available after installing BepInEx.</code>
+                    <code v-else>这些参数在安装BepInEx后才会生效。</code>
                 </p>
             </div>
             <div ref="Game won't start" v-if="activeTab === `Game won't start`">
-                <h2 class='title is-5'>A red box appears when I try to start the game</h2>
-                <p>Read the suggestion at the bottom of the red box.</p>
+                <h2 class='title is-5'>开始游戏后出现红框</h2>
+                <p>按红框底部的建议操作。</p>
                 <hr/>
-                <h2 class='title is-5'>I'm taken to the Steam store page</h2>
-                <p>That's because you don't legally own the game. The manager only supports legal copies.</p>
+                <h2 class='title is-5'>直接跳转到了Steam商店页面</h2>
+                <p>看起来你没有购买游戏的正版拷贝。本管理器只支持正版游戏。</p>
                 <hr/>
-                <h2 class='title is-5'>A text window appears and closes immediately.</h2>
-                <p>Try running the preloader fix on the Settings screen.</p>
-                <p>If it persists, force exit Steam and start modded with Steam closed.</p>
+                <h2 class='title is-5'>弹出了一个文本窗口然后马上就消失了。</h2>
+                <p>尝试在设置界面修复preloader。</p>
+                <p>如果依然存在问题，强行退出Steam后再点击按钮启动游戏。</p>
             </div>
             <div ref="Mods not appearing" v-if="activeTab === 'Mods not appearing'">
-                <h2 class='title is-5'>Potential solutions</h2>
-                <p>The most common issues are solved by following the instructions exactly as listed
+                <h2 class='title is-5'>可能的解决方案</h2>
+                <p>最常见的问题都可以通过参考
                     <Link target="external" url="https://github.com/ebkr/r2modmanPlus/wiki/Why-aren't-my-mods-working%3F">
-                        here
-                    </Link>
+                        这里
+                    </Link>的网页解决。
                 </p>
             </div>
             <div ref="Updating" v-if="activeTab === 'Updating'">
-                <h2 class='title is-5'>Auto-updates</h2>
-                <p>The manager updates automatically on close assuming an update is available.</p>
-                <p>Updates are downloaded in the background.</p>
-                <p>You may receive a prompt to run <i>old_uninstaller</i> as an admin. This is the updater.</p>
-                <p>If a problem occurs with an update, download and run the latest installer.</p>
+                <h2 class='title is-5'>自动更新</h2>
+                <p>当有更新时，管理器会在关闭时自我更新。</p>
+                <p>更新文件会在后台下载。</p>
+                <p>在更新过程中你可能会收到请求管理员身份运行<i>old_uninstaller</i>的提示，这是自动更新的正常流程。</p>
+                <p>如果更新中出现问题，你可以手动下载安装本管理器。</p>
                 <hr/>
-                <h2 class='title is-5'>I don't want updates</h2>
+                <h2 class='title is-5'>我不想要更新</h2>
                 <p>
-                    On GitHub there is a portable version that doesn't auto update. You are however prompted that an
-                    update is available.
+                    GitHub上有一个不进行自动更新的便携版，但他依然会提示你有可用的更新。
                 </p>
             </div>
         </div>
@@ -109,6 +104,15 @@
         private doorstopTarget = "";
         private activeGame!: Game;
 
+        tabToText(key: string): string {
+            switch (key) {
+            case 'General': return '常规';
+            case 'Game won\'t start': return '游戏无法启动';
+            case 'Mods not appearing': return 'Mod无效';
+            case 'Updating': return '更新';
+            default: return '';
+            }
+        }
         changeTab(key: string) {
             this.activeTab = key;
         }

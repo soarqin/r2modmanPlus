@@ -6,31 +6,31 @@
       <div class="modal-content">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">{{addingProfileType}} a profile</p>
+            <p class="card-header-title">{{addingProfileType}}一个用户配置</p>
           </header>
             <template v-if="(addingProfile && importUpdateSelection === 'IMPORT') || (addingProfile && importUpdateSelection === null) || renamingProfile">
               <div class="card-content">
-                <p>This profile will store its own mods independently from other profiles.</p>
+                <p>各用户配置的数据是独立的，与其他用户配置隔离。</p>
                 <br/>
                 <input class="input" v-model="newProfileName" />
                 <br/><br/>
                 <span class="tag is-dark" v-if="newProfileName === '' || makeProfileNameSafe(newProfileName) === ''">
-                    Profile name required
+                    需要用户配置名称
                 </span>
                 <span class="tag is-success" v-else-if="!doesProfileExist(newProfileName)">
-                    "{{makeProfileNameSafe(newProfileName)}}" is available
+                    "{{makeProfileNameSafe(newProfileName)}}" 已存在
                 </span>
                 <span class="tag is-danger" v-else-if="doesProfileExist(newProfileName)">
-                    "{{makeProfileNameSafe(newProfileName)}}" is either already in use, or contains invalid characters
+                    "{{makeProfileNameSafe(newProfileName)}}" 已经被使用，或包含无效字符
                 </span>
               </div>
             </template>
             <template v-if="addingProfile && importUpdateSelection === 'UPDATE'">
                 <div class="card-content">
                     <div class="notification is-warning">
-                        <p>All contents of the profile will be overwritten with the contents of the code/file.</p>
+                        <p>用户配置内的所有数据/文件都会被覆盖。</p>
                     </div>
-                    <p>Select a profile below:</p>
+                    <p>请选择用户配置:</p>
                     <br/>
                     <select class="select" v-model="selectedProfile">
                         <option v-for="profile of profileList" :key="profile">{{ profile }}</option>
@@ -39,16 +39,16 @@
             </template>
           <div class="card-footer">
               <template v-if="addingProfile && (importUpdateSelection === 'IMPORT' || importUpdateSelection === null)">
-                  <button class="button is-danger" v-if="doesProfileExist(newProfileName)">Create</button>
-                  <button class="button is-info" @click="createProfile(newProfileName)" v-else>Create</button>
+                  <button class="button is-danger" v-if="doesProfileExist(newProfileName)">创建</button>
+                  <button class="button is-info" @click="createProfile(newProfileName)" v-else>创建</button>
               </template>
               <template v-if="addingProfile && importUpdateSelection === 'UPDATE'">
-                  <button class="button is-danger" v-if="!doesProfileExist(selectedProfile)">Update profile: {{ selectedProfile }}</button>
-                  <button class="button is-info" v-else @click="updateProfile(selectedProfile)">Update profile: {{ selectedProfile }}</button>
+                  <button class="button is-danger" v-if="!doesProfileExist(selectedProfile)">更新用户配置: {{ selectedProfile }}</button>
+                  <button class="button is-info" v-else @click="updateProfile(selectedProfile)">更新用户配置: {{ selectedProfile }}</button>
               </template>
               <template v-if="renamingProfile">
-                  <button class="button is-danger" v-if="doesProfileExist(newProfileName)">Rename</button>
-                  <button class="button is-info" @click="performRename(newProfileName)" v-else>Rename</button>
+                  <button class="button is-danger" v-if="doesProfileExist(newProfileName)">改名</button>
+                  <button class="button is-info" @click="performRename(newProfileName)" v-else>改名</button>
               </template>
           </div>
         </div>
@@ -61,13 +61,13 @@
         <div class="modal-content">
             <div class="card">
                 <header class="card-header">
-                    <p class="card-header-title">Are you going to be updating an existing profile or creating a new one?</p>
+                    <p class="card-header-title">你要更新已经存在的用户配置还是创建一个新的？</p>
                 </header>
                 <div class="card-footer">
                     <button class="button is-info"
-                            @click="showImportUpdateSelectionModal = false; showImportModal = true; importUpdateSelection = 'IMPORT'">Import new profile</button>
+                            @click="showImportUpdateSelectionModal = false; showImportModal = true; importUpdateSelection = 'IMPORT'">导入新用户配置</button>
                     <button class="button is-primary"
-                            @click="showImportUpdateSelectionModal = false; showImportModal = true; importUpdateSelection = 'UPDATE'">Update existing profile</button>
+                            @click="showImportUpdateSelectionModal = false; showImportModal = true; importUpdateSelection = 'UPDATE'">更新已存在的用户配置</button>
                 </div>
             </div>
         </div>
@@ -79,14 +79,14 @@
       <div class="modal-content">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title" v-if="importUpdateSelection === 'IMPORT'">How are you importing a profile?</p>
-            <p class="card-header-title" v-if="importUpdateSelection === 'UPDATE'">How are you updating your profile?</p>
+            <p class="card-header-title" v-if="importUpdateSelection === 'IMPORT'">如何导入一个用户配置？</p>
+            <p class="card-header-title" v-if="importUpdateSelection === 'UPDATE'">如何更新已经存在的用户配置？</p>
           </header>
           <div class="card-footer">
             <button class="button is-info"
-              @click="importProfile(); showImportModal = false;">From file</button>
+              @click="importProfile(); showImportModal = false;">从文件</button>
             <button class="button is-primary"
-              @click="profileImportCode = ''; showImportModal = false; showCodeModal = true;">From code</button>
+              @click="profileImportCode = ''; showImportModal = false; showCodeModal = true;">从代码</button>
           </div>
         </div>
       </div>
@@ -98,21 +98,21 @@
       <div class="modal-content">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">Enter the profile code</p>
+            <p class="card-header-title">输入用户配置代码</p>
           </header>
           <div class="card-content">
             <input type="text" class="input" v-model="profileImportCode" />
             <br />
             <br />
-            <span class="tag is-dark" v-if="profileImportCode === ''">You haven't entered a code</span>
-            <span class="tag is-success" v-else>You may import the profile</span>
+            <span class="tag is-dark" v-if="profileImportCode === ''">未输入代码</span>
+            <span class="tag is-success" v-else>可以导入代码了</span>
           </div>
           <div class="card-footer">
             <button
               class="button is-danger"
               v-if="profileImportCode === ''"
             >Fix issues before importing</button>
-            <button class="button is-info" @click="showCodeModal = false; importProfileUsingCode();" v-else>Import</button>
+            <button class="button is-info" @click="showCodeModal = false; importProfileUsingCode();" v-else>导入</button>
           </div>
         </div>
       </div>
@@ -124,18 +124,18 @@
       <div class="modal-content">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">Delete profile</p>
+            <p class="card-header-title">删除用户配置</p>
           </header>
           <div class="card-content">
-            <p>This will remove all mods, and their config files, installed within this profile.</p>
-            <p>If this was an accident, click either the darkened area, or the cross inside located in the top right.</p>
-            <p>Are you sure you'd like to delete this profile?</p>
+            <p>这将删除配置内安装的所有Mod和他们的配置文件。</p>
+            <p>如果不小心进入这个界面，请点击黑暗区域或者右上角的×。</p>
+            <p>你确定要删除这个用户配置吗？</p>
           </div>
           <div class="card-footer">
             <button
               class="button is-danger"
               @click="removeProfileAfterConfirmation()"
-            >Delete profile</button>
+            >删除配置</button>
           </div>
         </div>
       </div>
@@ -147,11 +147,11 @@
       <div class="modal-content">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">{{percentageImported}}% imported</p>
+            <p class="card-header-title">{{percentageImported}}% 已导入</p>
           </header>
           <div class="card-content">
-            <p>This may take a while, as mods are being downloaded.</p>
-            <p>Please do not close {{appName}}.</p>
+            <p>Mod正在下载，请耐心等待。</p>
+            <p>请不要关闭 {{appName}}。</p>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@
       <div class="modal-background" v-on:click="errorMessage = ''"></div>
       <div class="modal-content">
         <div class="notification is-danger">
-          <h3 class="title">Error</h3>
+          <h3 class="title">错误</h3>
           <h5 class="title is-5">{{errorMessage}}</h5>
           <p>{{errorStack}}</p>
         </div>
@@ -174,15 +174,15 @@
          <div class="modal-background"></div>
          <div class="modal-content">
              <div class="notification is-info">
-                <h3 class="title">Loading file</h3>
-                 <p>A file selection window will appear. Once a profile has been selected it may take a few moments.</p>
+                <h3 class="title">正在加载文件</h3>
+                 <p>将弹出文件选择窗口，选好用户配置后可能要稍等片刻。</p>
              </div>
          </div>
     </div>
     <!-- Content -->
     <hero
-      title="Profile selection"
-      subtitle="Profiles help to organise mods easily"
+      title="选择用户配置"
+      subtitle="多用户配置方便进行Mod管理"
       heroType="is-info"
     />
     <div class="columns">
@@ -194,7 +194,7 @@
                 <div class='notification'>
                     <div class="container">
                         <i class='fas fa-long-arrow-alt-left margin-right' />
-                        <strong><a @click="backToGameSelection">Back to game selection</a></strong>
+                        <strong><a @click="backToGameSelection">返回游戏选择界面</a></strong>
                     </div>
                 </div>
                 <div v-for="(profileName) of profileList" :key="profileName">
@@ -214,21 +214,21 @@
                 <div class="container">
                   <nav class="level">
                     <div class="level-item">
-                      <a class="button is-info" @click="setProfileAndContinue()">Select profile</a>
+                      <a class="button is-info" @click="setProfileAndContinue()">选择用户配置</a>
                     </div>
                       <div class="level-item">
-                          <a class="button" v-if="selectedProfile === 'Default'" :disabled="true">Rename</a>
-                          <a class="button" @click="renameProfile()" v-else>Rename</a>
+                          <a class="button" v-if="selectedProfile === 'Default'" :disabled="true">改名</a>
+                          <a class="button" @click="renameProfile()" v-else>改名</a>
                       </div>
                     <div class="level-item">
-                      <a class="button" @click="importUpdateSelection = null; newProfile('Create', undefined)">Create new</a>
+                      <a class="button" @click="importUpdateSelection = null; newProfile('创建', undefined)">创建</a>
                     </div>
                     <div class="level-item">
                       <!-- <a class='button' @click="importProfile()">Import profile</a> -->
-                      <a class="button" @click="showImportUpdateSelectionModal = true; importUpdateSelection = null;">Import / Update</a>
+                      <a class="button" @click="showImportUpdateSelectionModal = true; importUpdateSelection = null;">导入/更新</a>
                     </div>
                     <div class="level-item">
-                      <a class="button is-danger" @click="removeProfile()">Delete</a>
+                      <a class="button is-danger" @click="removeProfile()">删除</a>
                     </div>
                   </nav>
                 </div>
@@ -290,7 +290,7 @@ export default class Profiles extends Vue {
 
     private addingProfile: boolean = false;
     private newProfileName: string = '';
-    private addingProfileType: string = 'Create';
+    private addingProfileType: string = '创建';
 
     private removingProfile: boolean = false;
     private importingProfile: boolean = false;
@@ -336,7 +336,7 @@ export default class Profiles extends Vue {
 
     renameProfile() {
         this.newProfileName = this.selectedProfile;
-        this.addingProfileType = "Rename";
+        this.addingProfileType = "改名";
         this.renamingProfile = true;
     }
 
@@ -397,7 +397,7 @@ export default class Profiles extends Vue {
         } catch (e) {
             const err: Error = e as Error;
             this.showError(
-                new R2Error('Error whilst deleting profile', err.message, null)
+                new R2Error('删除用户配置时发生错误', err.message, null)
             );
         }
         if (
@@ -482,7 +482,7 @@ export default class Profiles extends Vue {
             const filepath = await ProfileImportExport.downloadProfileCode(this.profileImportCode);
             await this.importProfileHandler([filepath]);
         } catch (e: any) {
-            this.showError(R2Error.fromThrownValue(e, "Failed to import profile"));
+            this.showError(R2Error.fromThrownValue(e, "无法导入用户配置"));
         }
     }
 
@@ -566,7 +566,7 @@ export default class Profiles extends Vue {
                                         try {
                                             await FileUtils.emptyDirectory(path.join(Profile.getDirectory(), event.detail));
                                         } catch (e) {
-                                            console.log("Failed to empty directory:", e);
+                                            console.log("无法清空目录:", e);
                                         }
                                         await fs.rmdir(path.join(Profile.getDirectory(), event.detail));
                                         await fs.rename(path.join(Profile.getDirectory(), profileName), path.join(Profile.getDirectory(), event.detail));
@@ -578,7 +578,7 @@ export default class Profiles extends Vue {
                 })();
             }
         }) as EventListener, {once: true});
-        this.newProfile('Import', parsed.getProfileName());
+        this.newProfile('导入', parsed.getProfileName());
     }
 
     async importAlternativeManagerProfile(file: string) {
@@ -587,7 +587,7 @@ export default class Profiles extends Vue {
             const jsonContent = JSON.parse(fileString.trim());
             const ror2Itf = jsonContent as Itf_RoR2MM;
             if (ror2Itf.name != undefined && ror2Itf.packages != undefined) {
-                this.newProfile('Import', ror2Itf.name);
+                this.newProfile('导入', ror2Itf.name);
                 const itfPackages = ror2Itf.packages;
                 document.addEventListener("created-profile", ((() => {
                     const packages = itfPackages.map(value => ExportMod.fromFullString(value));
@@ -597,7 +597,7 @@ export default class Profiles extends Vue {
                 }) as EventListener), {once: true});
             }
         } catch (e) {
-            const err = new R2Error("Failed to import profile", (e as Error).message, null);
+            const err = new R2Error("无法导入用户配置", (e as Error).message, null);
             this.showError(err);
             return;
         }
@@ -606,12 +606,12 @@ export default class Profiles extends Vue {
     importProfile() {
         this.showFileSelectionHang = true;
         InteractionProvider.instance.selectFile({
-            title: 'Import Profile',
+            title: '导入用户配置',
             filters: [{
                 name: "*",
                 extensions: ["r2z", "r2x"]
             }],
-            buttonLabel: 'Import'
+            buttonLabel: '导入'
         }).then(value => {
             this.showFileSelectionHang = false;
             this.importProfileHandler(value);

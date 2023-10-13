@@ -54,7 +54,7 @@ export default class UtilityMixin extends Vue {
             await this.refreshThunderstoreModList();
         } catch (e) {
             if (this.tsRefreshFailed) {
-                console.error("Two consecutive background refresh attempts failed");
+                console.error("两次后台刷新尝试失败");
                 throw e;
             }
 

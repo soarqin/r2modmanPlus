@@ -1,7 +1,7 @@
 export enum SortNaming {
 
-    CUSTOM = "Custom",
-    MOD_NAME = "Mod name",
-    AUTHOR = "Author name",
+    CUSTOM = "不改变",
+    MOD_NAME = "Mod名",
+    AUTHOR = "作者名",
 
 }

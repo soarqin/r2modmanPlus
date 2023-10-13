@@ -1,4 +1,4 @@
 export default {
-    STANDARD: 'Standard',
-    REVERSE: 'Reverse',
+    STANDARD: '正向',
+    REVERSE: '反向',
 };

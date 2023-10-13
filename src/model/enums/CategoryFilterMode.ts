@@ -1,7 +1,7 @@
 enum CategoryFilterMode {
-    OR = 'Mod has at least one of these categories',
-    AND = 'Mod has all of these categories',
-    EXCLUDE = 'Mod has none of these categories'
+    OR = '至少匹配一个分类',
+    AND = '匹配全部分类',
+    EXCLUDE = '不包含这些分类'
 };
 
 export default CategoryFilterMode;

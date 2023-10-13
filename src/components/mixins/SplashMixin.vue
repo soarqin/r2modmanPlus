@@ -23,7 +23,7 @@ export default class SplashMixin extends Vue {
         const item = this.requests.find((ri) => ri.getName() === name);
 
         if (item === undefined) {
-            throw new Error(`Unknown RequestItem "${name}"`);
+            throw new Error(`无效的请求项目"${name}"`);
         }
 
         return item;
@@ -36,10 +36,10 @@ export default class SplashMixin extends Vue {
 
     // Get the list of game-specific packages to exclude.
     async getExclusions() {
-        this.loadingText = 'Connecting to GitHub repository';
+        this.loadingText = '正在连接到GitHub仓库';
 
         const showProgress = (progress: number) => {
-            this.loadingText = 'Downloading exclusions';
+            this.loadingText = '正在下载排除列表';
             this.getRequestItem('ExclusionsList').setProgress(progress);
         };
 
@@ -48,11 +48,11 @@ export default class SplashMixin extends Vue {
 
     // Get the list of Thunderstore mods from API.
     async getThunderstoreMods() {
-        this.loadingText = 'Connecting to Thunderstore';
+        this.loadingText = '正在连接到Thunderstore';
         let response: ApiResponse|undefined = undefined;
 
         const showProgress = (progress: number) => {
-            this.loadingText = 'Getting mod list from Thunderstore';
+            this.loadingText = '正在从Thunderstore获取mod列表';
             this.getRequestItem('ThunderstoreDownload').setProgress(progress);
         };
 
@@ -60,8 +60,8 @@ export default class SplashMixin extends Vue {
             response = await ConnectionProvider.instance.getPackages(this.activeGame, showProgress, 3);
         } catch (e) {
             this.isOffline = true;
-            this.heroTitle = 'Failed to get mods from Thunderstore';
-            this.loadingText = 'You may be offline or Thunderstore is unavailabe. Checking cache.';
+            this.heroTitle = '无法从Thunderstore获取mod列表';
+            this.loadingText = '可能网络故障或者Thunderstore离线。正在检查缓存。';
         }
 
         if (response) {
@@ -76,8 +76,8 @@ export default class SplashMixin extends Vue {
             await this.$store.dispatch('updateThunderstoreModList', ThunderstorePackages.PACKAGES);
             await this.moveToNextScreen();
         } else {
-            this.heroTitle = 'Failed to get mods from Thunderstore and cache';
-            this.loadingText = 'You may be offline or Thunderstore is unavailabe. However, you may still use the manager offline.';
+            this.heroTitle = '无法从Thudnerstore和缓存获取mod列表';
+            this.loadingText = '可能网络故障或者Thunderstore离线。不过你仍然可以离线管理mod。';
         }
     }
 
